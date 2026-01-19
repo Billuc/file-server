@@ -1,0 +1,20 @@
+---
+// Props for the search bar
+interface Props {
+  action: string;
+}
+const { action } = Astro.props;
+---
+
+<form class="search-bar" action={action} method="get">
+  <input
+    id="key"
+    name="key"
+    type="text"
+    placeholder="e.g., a-b-c-d"
+    required
+    pattern="[a-z]+-[a-z]+-[a-z]+-[a-z]+"
+    class="search-bar-input"
+  />
+  <button type="submit" class="search-bar-button">Search</button>
+</form>

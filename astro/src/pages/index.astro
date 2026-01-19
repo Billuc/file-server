@@ -1,0 +1,20 @@
+---
+import SearchBar from "@/components/SearchBar.astro";
+---
+
+<html>
+  <head>
+    <title>File Server</title>
+    <link rel="stylesheet" href="/src/assets/styles.css" />
+  </head>
+  <body>
+    <header class="navbar">
+      <span class="navbar-title">File Server</span>
+    </header>
+
+    <main>
+      <h1 class="home-title">Welcome to the File Server</h1>
+      <SearchBar action="/file" />
+    </main>
+  </body>
+</html>

@@ -1,0 +1,68 @@
+---
+import SearchBar from "@/components/SearchBar.astro";
+
+// Astro component script
+const filename: string = "example.txt";
+const fileContent: string = "This is a placeholder for the file content.";
+---
+
+<html>
+  <head>
+    <title>File Details</title>
+    <link rel="stylesheet" href="/src/assets/styles.css" />
+  </head>
+  <body>
+    <header class="navbar">
+      <a href="/" class="navbar-title">File Server</a>
+      <SearchBar action="/file" />
+    </header>
+    <main>
+      <h1>File Details</h1>
+      <section>
+        <h2>Filename: {filename}</h2>
+        <pre class="file-content">{fileContent}</pre>
+        <div class="file-buttons">
+          <button id="copy-button" class="file-button">Copy</button>
+          <button id="download-button" class="file-button">Download</button>
+          <button id="share-button" class="file-button">Share</button>
+        </div>
+      </section>
+    </main>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const fileContent = "This is a placeholder for the file content.";
+        const filename = "example.txt";
+
+        const copyContent = () => {
+          navigator.clipboard.writeText(fileContent).then(() => {
+            alert("Content copied to clipboard!");
+          });
+        };
+
+        const downloadContent = () => {
+          const blob = new Blob([fileContent], { type: "text/plain" });
+          const link = document.createElement("a");
+          link.href = URL.createObjectURL(blob);
+          link.download = filename;
+          link.click();
+        };
+
+        const shareContent = () => {
+          navigator.clipboard.writeText(window.location.href).then(() => {
+            alert("Current location copied to clipboard!");
+          });
+        };
+
+        document
+          .getElementById("copy-button")
+          ?.addEventListener("click", copyContent);
+        document
+          .getElementById("download-button")
+          ?.addEventListener("click", downloadContent);
+        document
+          .getElementById("share-button")
+          ?.addEventListener("click", shareContent);
+      });
+    </script>
+  </body>
+</html>
