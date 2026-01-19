@@ -12,8 +12,8 @@ static KEYS_TEMPLATE: &str = include_str!("../templates/keys.html");
 
 #[derive(Serialize, Deserialize)]
 pub struct Keys {
-    nouns: HashMap<String, String>,      // Key -> Subcategory
-    adjectives: HashMap<String, String>, // Key -> Subcategory
+    nouns: HashMap<String, Vec<String>>,      // Subcategory -> Keys
+    adjectives: HashMap<String, Vec<String>>, // Subcategory -> Keys
 }
 
 impl Keys {
@@ -24,14 +24,17 @@ impl Keys {
         }
     }
 
-    fn add_key(&mut self, category: &str, key: &str, subcategory: &str) {
+    fn add_key(&mut self, category: &str, subcategory: &str, key: &str) {
         let target = match category {
             "nouns" => &mut self.nouns,
             "adjectives" => &mut self.adjectives,
             _ => return,
         };
 
-        target.insert(key.to_string(), subcategory.to_string());
+        target
+            .entry(subcategory.to_string())
+            .or_insert_with(Vec::new)
+            .push(key.to_string());
     }
 
     fn get_subcategories(&self, category: &str) -> HashSet<String> {
@@ -41,11 +44,17 @@ impl Keys {
             _ => return HashSet::new(),
         };
 
-        target.values().cloned().collect()
+        target.keys().cloned().collect()
     }
 
     fn contains(&self, key: &str) -> bool {
-        self.nouns.contains_key(key) || self.adjectives.contains_key(key)
+        self.nouns
+            .values()
+            .any(|keys| keys.contains(&key.to_string()))
+            || self
+                .adjectives
+                .values()
+                .any(|keys| keys.contains(&key.to_string()))
     }
 }
 
@@ -53,7 +62,7 @@ impl Keys {
 pub struct KeyForm {
     key: String,
     category: String,
-    subcategory: Option<String>,
+    subcategory: String,
 }
 
 pub enum Feedback {
@@ -67,21 +76,20 @@ pub fn render_keys_container(keys: Keys, feedback: Option<Feedback>) -> String {
     // Generate HTML to display keys
     let nouns_keys_list = keys
         .nouns
-        .keys()
-        .chain(keys.adjectives.keys())
-        .map(|key| format!("<li>{}</li>", key))
+        .iter()
+        .map(|(sub, keys)| format!("<li>{}: {}</li>", sub, keys.len()))
         .collect::<Vec<_>>()
         .join("");
 
     let adjectives_keys_list = keys
         .adjectives
-        .keys()
-        .map(|key| format!("<li>{}</li>", key))
+        .iter()
+        .map(|(sub, keys)| format!("<li>{}: {}</li>", sub, keys.len()))
         .collect::<Vec<_>>()
         .join("");
 
-    context.insert("noun_keys_list", nouns_keys_list.as_str());
-    context.insert("adjective_keys_list", adjectives_keys_list.as_str());
+    context.insert("noun_list", nouns_keys_list.as_str());
+    context.insert("adjective_list", adjectives_keys_list.as_str());
 
     let mut feedback_message = String::new();
     match feedback {
@@ -119,11 +127,7 @@ pub async fn add_key_handler(Form(payload): Form<KeyForm>) -> Html<String> {
         Feedback::Error("Key already exists!".to_string())
     } else {
         // Add the new key
-        keys.add_key(
-            &payload.category,
-            &payload.key,
-            &payload.subcategory.unwrap_or("".to_string()),
-        );
+        keys.add_key(&payload.category, &payload.subcategory, &payload.key);
 
         // Save updated keys back to the JSON file
         fs::write(KEYS_FILE, serde_json::to_string(&keys).unwrap())

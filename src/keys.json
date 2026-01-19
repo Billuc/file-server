@@ -1,1 +1,17 @@
-{ "nouns": { "elephant": "Animals", "lion": "Animals" }, "adjectives": {} }
+{
+  "nouns": {
+    "Animaux": [],
+    "Véhicules": [],
+    "Objets": [],
+    "Meubles": [],
+    "Outils": [],
+    "Fruits et légumes": [],
+    "Nourriture et boissons": [],
+    "Batiments": [],
+    "Instruments de musique": [],
+    "Vêtements et accessoires": [],
+    "Plantes et fleurs": [],
+    "Métiers et professions": []
+  },
+  "adjectives": {}
+}

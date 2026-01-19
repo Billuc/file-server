@@ -18,16 +18,19 @@
     {{keys_container}}
     <form method="POST" action="/keys#container" target="htmz">
       <label for="category">Category:</label>
-      <select name="category" id="category">
+      <select name="category" id="category" required>
         <option value="nouns">Nouns</option>
         <option value="adjectives">Adjectives</option>
       </select>
-      <label for="key">Key:</label>
-      <input type="text" name="key" id="key" placeholder="Key" required />
+
       <label for="subcategory">Subcategory:</label>
-      <select name="subcategory" id="subcategory">
+      <select name="subcategory" id="subcategory" required>
         {{subcategory_options}}
       </select>
+
+      <label for="key">Key:</label>
+      <input type="text" name="key" id="key" placeholder="Key" required />
+
       <button type="submit">Add Key</button>
     </form>
   </body>
