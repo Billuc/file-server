@@ -1,9 +1,23 @@
 ---
+export const prerender = false;
+
 import SearchBar from "@/components/SearchBar.astro";
+import { eq } from "astro:db";
+import { File as DbFile } from "astro:db";
+import { db } from "astro:db";
+import { InternalError } from "@/utils/InternalError";
 
 // Astro component script
-const filename: string = "example.txt";
-const fileContent: string = "This is a placeholder for the file content.";
+const params = Astro.url.searchParams;
+const fileId = params.get("key");
+
+let file = fileId
+  ? await db.select().from(DbFile).where(eq(DbFile.id, fileId)).get()
+  : null;
+
+if (!file) {
+  throw new InternalError(404, "File Not Found");
+}
 ---
 
 <html>
@@ -19,32 +33,39 @@ const fileContent: string = "This is a placeholder for the file content.";
     <main>
       <h1>File Details</h1>
       <section>
-        <h2>Filename: {filename}</h2>
-        <pre class="file-content">{fileContent}</pre>
+        <h2>Filename: {file.name}</h2>
+        <pre class="file-content">{file.content}</pre>
         <div class="file-buttons">
-          <button id="copy-button" class="file-button">Copy</button>
-          <button id="download-button" class="file-button">Download</button>
+          <button
+            id="copy-button"
+            class="file-button"
+            data-content={file.content}>Copy</button
+          >
+          <button id="download-button" class="file-button" data-key={file.id}>
+            Download
+          </button>
           <button id="share-button" class="file-button">Share</button>
         </div>
       </section>
     </main>
     <script>
       document.addEventListener("DOMContentLoaded", () => {
-        const fileContent = "This is a placeholder for the file content.";
-        const filename = "example.txt";
+        const copyButton = document.getElementById("copy-button")!;
+        const downloadButton = document.getElementById("download-button")!;
+        const shareButton = document.getElementById("share-button")!;
 
         const copyContent = () => {
+          const fileContent = copyButton.dataset.content;
+          if (!fileContent) throw new Error("Could not get file content");
           navigator.clipboard.writeText(fileContent).then(() => {
             alert("Content copied to clipboard!");
           });
         };
 
         const downloadContent = () => {
-          const blob = new Blob([fileContent], { type: "text/plain" });
-          const link = document.createElement("a");
-          link.href = URL.createObjectURL(blob);
-          link.download = filename;
-          link.click();
+          const fileKey = downloadButton.dataset.key;
+          if (!fileKey) throw new Error("Could not get file key");
+          window.location.href = `/download?key=${fileKey}`;
         };
 
         const shareContent = () => {

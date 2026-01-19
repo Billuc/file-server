@@ -1,0 +1,23 @@
+---
+import { InternalError } from "@/utils/InternalError";
+
+const error = Astro.props.error as InternalError;
+---
+
+<html>
+  <head>
+    <title>{error.code} - {error.message}</title>
+    <link rel="stylesheet" href="/src/assets/styles.css" />
+  </head>
+  <body>
+    <header class="navbar">
+      <a href="/" class="navbar-title">File Server</a>
+    </header>
+    <main>
+      <h1>{error.code} - {error.message}</h1>
+      <p>
+        Return to the <a href="/">homepage</a> ?
+      </p>
+    </main>
+  </body>
+</html>
