@@ -1,5 +1,4 @@
 import { db, File } from "astro:db";
-import { generateRandomKey } from "../src/utils/generateKey";
 
 // https://astro.build/db/seed
 export default async function seed() {

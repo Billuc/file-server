@@ -118,6 +118,26 @@ a.navbar-title {
   text-decoration: none;
 }
 
+/* Upload button styles */
+.upload-section {
+  margin: 2rem 0;
+}
+
+.upload-button {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.upload-button:hover {
+  background-color: #45a049;
+}
+
 /* Search bar styles */
 .search-bar {
   display: flex;
