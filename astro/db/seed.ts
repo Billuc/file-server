@@ -5,17 +5,17 @@ export default async function seed() {
   const sampleFiles = [
     {
       id: "aaaaa-bbbbb-ccccc-ddddd",
-      name: "File 1",
+      name: "file1.txt",
       content: "This is the content of File 1.",
     },
     {
       id: "bbbbb-ccccc-ddddd-eeeee",
-      name: "File 2",
+      name: "file2.txt",
       content: "This is the content of File 2.",
     },
     {
       id: "ccccc-ddddd-eeeee-fffff",
-      name: "File 3",
+      name: "file3.txt",
       content: "This is the content of File 3.",
     },
   ];

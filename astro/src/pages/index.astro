@@ -1,71 +1,56 @@
 ---
 import SearchBar from "@/components/SearchBar.astro";
+import Layout from "@/layouts/Layout.astro";
 ---
 
-<html>
-  <head>
-    <title>File Server</title>
-    <link rel="stylesheet" href="/src/assets/styles.css" />
-  </head>
-  <body>
-    <header class="navbar">
-      <span class="navbar-title">File Server</span>
-    </header>
+<Layout title="File Server">
+  <h1 class="home-title">Welcome to the File Server</h1>
+  <SearchBar />
+  <div class="upload-section">
+    <button id="upload-button" class="upload-button">Upload File</button>
+    <input type="file" id="file-input" accept=".txt" style="display: none;" />
+  </div>
+</Layout>
 
-    <main>
-      <h1 class="home-title">Welcome to the File Server</h1>
-      <SearchBar />
-      <div class="upload-section">
-        <button id="upload-button" class="upload-button">Upload File</button>
-        <input
-          type="file"
-          id="file-input"
-          accept=".txt"
-          style="display: none;"
-        />
-      </div>
-    </main>
-  </body>
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const uploadButton = document.getElementById("upload-button")!;
-      const fileInput = document.getElementById("file-input")!;
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const uploadButton = document.getElementById("upload-button")!;
+    const fileInput = document.getElementById("file-input")!;
 
-      uploadButton.addEventListener("click", () => {
-        fileInput.click();
-      });
-
-      fileInput.addEventListener("change", async (event) => {
-        const file = (event.target as HTMLInputElement).files?.[0];
-        if (!file) return;
-
-        // Only allow text files
-        if (!file.name.endsWith(".txt")) {
-          alert("Only .txt files are allowed");
-          return;
-        }
-
-        try {
-          const formData = new FormData();
-          formData.append("file", file);
-
-          const response = await fetch("/upload", {
-            method: "POST",
-            body: formData,
-            // Don't set Content-Type header - let browser handle it for FormData
-          });
-
-          if (response.ok) {
-            const result = await response.json();
-            window.location.href = `/${result.key}`;
-          } else {
-            throw new Error("Upload failed");
-          }
-        } catch (error) {
-          console.error("Error uploading file:", error);
-          alert("Error uploading file. Please try again.");
-        }
-      });
+    uploadButton.addEventListener("click", () => {
+      fileInput.click();
     });
-  </script>
-</html>
+
+    fileInput.addEventListener("change", async (event) => {
+      const file = (event.target as HTMLInputElement).files?.[0];
+      if (!file) return;
+
+      // Only allow text files
+      if (!file.name.endsWith(".txt")) {
+        alert("Only .txt files are allowed");
+        return;
+      }
+
+      try {
+        const formData = new FormData();
+        formData.append("file", file);
+
+        const response = await fetch("/upload", {
+          method: "POST",
+          body: formData,
+          // Don't set Content-Type header - let browser handle it for FormData
+        });
+
+        if (response.ok) {
+          const result = await response.json();
+          window.location.href = `/${result.key}`;
+        } else {
+          throw new Error("Upload failed");
+        }
+      } catch (error) {
+        console.error("Error uploading file:", error);
+        alert("Error uploading file. Please try again.");
+      }
+    });
+  });
+</script>

@@ -6,6 +6,7 @@ import { eq } from "astro:db";
 import { File as DbFile } from "astro:db";
 import { db } from "astro:db";
 import { InternalError } from "@/utils/InternalError";
+import Layout from "@/layouts/Layout.astro";
 
 // Astro component script
 const fileId = Astro.params["key"];
@@ -19,57 +20,44 @@ if (!file) {
 }
 ---
 
-<html>
-  <head>
-    <title>File Details</title>
-    <link rel="stylesheet" href="/src/assets/styles.css" />
-  </head>
-  <body>
-    <header class="navbar">
-      <a href="/" class="navbar-title">File Server</a>
-      <SearchBar />
-    </header>
-    <main>
-      <h1>File Details</h1>
-      <section>
-        <h2>Filename: {file.name}</h2>
-        <pre class="file-content">{file.content}</pre>
-        <div class="file-buttons">
-          <button
-            id="copy-button"
-            class="file-button"
-            data-content={file.content}>Copy</button
-          >
-          <form action="/download" method="GET" class="download-form">
-            <input type="hidden" name="key" value={file.id} />
-            <button type="submit" class="file-button"> Download </button>
-          </form>
-          <button id="share-button" class="file-button">Share</button>
-        </div>
-      </section>
-    </main>
-    <script>
-      document.addEventListener("DOMContentLoaded", () => {
-        const copyButton = document.getElementById("copy-button")!;
-        const shareButton = document.getElementById("share-button")!;
+<Layout title="File Details">
+  <h1>File Details</h1>
+  <section>
+    <h2>Filename: {file.name}</h2>
+    <pre class="file-content">{file.content}</pre>
+    <div class="file-buttons">
+      <button id="copy-button" class="file-button" data-content={file.content}
+        >Copy</button
+      >
+      <form action="/download" method="GET" class="download-form">
+        <input type="hidden" name="key" value={file.id} />
+        <button type="submit" class="file-button"> Download </button>
+      </form>
+      <button id="share-button" class="file-button">Share</button>
+    </div>
+  </section>
+</Layout>
 
-        const copyContent = () => {
-          const fileContent = copyButton.dataset.content;
-          if (!fileContent) throw new Error("Could not get file content");
-          navigator.clipboard.writeText(fileContent).then(() => {
-            alert("Content copied to clipboard!");
-          });
-        };
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const copyButton = document.getElementById("copy-button")!;
+    const shareButton = document.getElementById("share-button")!;
 
-        const shareContent = () => {
-          navigator.clipboard.writeText(window.location.href).then(() => {
-            alert("URL copied to clipboard!");
-          });
-        };
-
-        copyButton.addEventListener("click", copyContent);
-        shareButton.addEventListener("click", shareContent);
+    const copyContent = () => {
+      const fileContent = copyButton.dataset.content;
+      if (!fileContent) throw new Error("Could not get file content");
+      navigator.clipboard.writeText(fileContent).then(() => {
+        alert("Content copied to clipboard!");
       });
-    </script>
-  </body>
-</html>
+    };
+
+    const shareContent = () => {
+      navigator.clipboard.writeText(window.location.href).then(() => {
+        alert("URL copied to clipboard!");
+      });
+    };
+
+    copyButton.addEventListener("click", copyContent);
+    shareButton.addEventListener("click", shareContent);
+  });
+</script>
