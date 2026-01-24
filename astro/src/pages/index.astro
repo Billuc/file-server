@@ -14,7 +14,7 @@ import SearchBar from "@/components/SearchBar.astro";
 
     <main>
       <h1 class="home-title">Welcome to the File Server</h1>
-      <SearchBar action="/file" />
+      <SearchBar />
       <div class="upload-section">
         <button id="upload-button" class="upload-button">Upload File</button>
         <input
@@ -57,7 +57,7 @@ import SearchBar from "@/components/SearchBar.astro";
 
           if (response.ok) {
             const result = await response.json();
-            window.location.href = `/file?key=${result.key}`;
+            window.location.href = `/${result.key}`;
           } else {
             throw new Error("Upload failed");
           }

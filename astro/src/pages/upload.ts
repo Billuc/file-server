@@ -64,15 +64,8 @@ export const POST: APIRoute = async ({ request }) => {
     const key = generateRandomKey();
     console.log("Generated key for uploaded file:", key);
 
-    // Save to filesystem (errors won't break the upload process)
-    try {
-      await saveFileToFilesystem(key, extractedFile);
-    } catch (fsError) {
-      console.error(
-        "Filesystem save failed, but continuing with database storage:",
-        fsError,
-      );
-    }
+    // Save to filesystem
+    await saveFileToFilesystem(key, extractedFile);
 
     // Store the file in the database
     await db.insert(DbFile).values({

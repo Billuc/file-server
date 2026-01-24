@@ -8,8 +8,7 @@ import { db } from "astro:db";
 import { InternalError } from "@/utils/InternalError";
 
 // Astro component script
-const params = Astro.url.searchParams;
-const fileId = params.get("key");
+const fileId = Astro.params["key"];
 
 let file = fileId
   ? await db.select().from(DbFile).where(eq(DbFile.id, fileId)).get()
@@ -28,7 +27,7 @@ if (!file) {
   <body>
     <header class="navbar">
       <a href="/" class="navbar-title">File Server</a>
-      <SearchBar action="/file" />
+      <SearchBar />
     </header>
     <main>
       <h1>File Details</h1>
@@ -41,9 +40,10 @@ if (!file) {
             class="file-button"
             data-content={file.content}>Copy</button
           >
-          <button id="download-button" class="file-button" data-key={file.id}>
-            Download
-          </button>
+          <form action="/download" method="GET" class="download-form">
+            <input type="hidden" name="key" value={file.id} />
+            <button type="submit" class="file-button"> Download </button>
+          </form>
           <button id="share-button" class="file-button">Share</button>
         </div>
       </section>
@@ -51,7 +51,6 @@ if (!file) {
     <script>
       document.addEventListener("DOMContentLoaded", () => {
         const copyButton = document.getElementById("copy-button")!;
-        const downloadButton = document.getElementById("download-button")!;
         const shareButton = document.getElementById("share-button")!;
 
         const copyContent = () => {
@@ -62,27 +61,14 @@ if (!file) {
           });
         };
 
-        const downloadContent = () => {
-          const fileKey = downloadButton.dataset.key;
-          if (!fileKey) throw new Error("Could not get file key");
-          window.location.href = `/download?key=${fileKey}`;
-        };
-
         const shareContent = () => {
           navigator.clipboard.writeText(window.location.href).then(() => {
-            alert("Current location copied to clipboard!");
+            alert("URL copied to clipboard!");
           });
         };
 
-        document
-          .getElementById("copy-button")
-          ?.addEventListener("click", copyContent);
-        document
-          .getElementById("download-button")
-          ?.addEventListener("click", downloadContent);
-        document
-          .getElementById("share-button")
-          ?.addEventListener("click", shareContent);
+        copyButton.addEventListener("click", copyContent);
+        shareButton.addEventListener("click", shareContent);
       });
     </script>
   </body>

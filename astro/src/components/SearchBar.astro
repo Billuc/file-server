@@ -1,12 +1,8 @@
 ---
-// Props for the search bar
-interface Props {
-  action: string;
-}
-const { action } = Astro.props;
+
 ---
 
-<form class="search-bar" action={action} method="get">
+<form class="search-bar">
   <input
     id="key"
     name="key"
@@ -18,3 +14,26 @@ const { action } = Astro.props;
   />
   <button type="submit" class="search-bar-button">Search</button>
 </form>
+
+<script>
+  const keyPattern = /^[a-z]+-[a-z]+-[a-z]+-[a-z]+$/;
+
+  function onFileSearch(event: Event) {
+    event.preventDefault();
+    const form = event.target as HTMLFormElement;
+    const input = form.elements.namedItem("key") as HTMLInputElement;
+    const key = input.value.trim();
+
+    // Validate the key format
+    if (!keyPattern.test(key)) {
+      alert("Invalid key format. Please use the format: aaaa-bbb-ccccc-dddd");
+    } else {
+      // Redirect to the file page with the provided key
+      window.location.href = `/${key}`;
+    }
+  }
+
+  document
+    .querySelector(".search-bar")
+    ?.addEventListener("submit", onFileSearch);
+</script>
