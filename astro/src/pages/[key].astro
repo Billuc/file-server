@@ -20,15 +20,12 @@ if (!file) {
 }
 ---
 
-<Layout title="File Details">
-  <h1>File Details</h1>
-  <section>
-    <h2>Filename: {file.name}</h2>
-    <pre class="file-content">{file.content}</pre>
+<Layout title={file.name}>
+  <section class="file-header">
+    <h2>{file.name}</h2>
+
     <div class="file-buttons">
-      <button id="copy-button" class="file-button" data-content={file.content}
-        >Copy</button
-      >
+      <button id="copy-button" class="file-button"> Copy </button>
       <form action="/download" method="GET" class="download-form">
         <input type="hidden" name="key" value={file.id} />
         <button type="submit" class="file-button"> Download </button>
@@ -36,17 +33,20 @@ if (!file) {
       <button id="share-button" class="file-button">Share</button>
     </div>
   </section>
+
+  <section>
+    <pre id="file-content">{file.content}</pre>
+  </section>
 </Layout>
 
 <script>
   document.addEventListener("DOMContentLoaded", () => {
     const copyButton = document.getElementById("copy-button")!;
     const shareButton = document.getElementById("share-button")!;
+    const fileContent = document.getElementById("file-content")!;
 
     const copyContent = () => {
-      const fileContent = copyButton.dataset.content;
-      if (!fileContent) throw new Error("Could not get file content");
-      navigator.clipboard.writeText(fileContent).then(() => {
+      navigator.clipboard.writeText(fileContent.textContent).then(() => {
         alert("Content copied to clipboard!");
       });
     };
