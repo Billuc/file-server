@@ -12,5 +12,9 @@
     "@astrojs/db": "^0.18.3",
     "@astrojs/node": "^9.5.2",
     "astro": "^5.16.11"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.6",
+    "typescript": "^5.9.3"
   }
 }

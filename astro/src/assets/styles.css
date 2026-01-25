@@ -24,7 +24,7 @@ main {
 /* Home page styles */
 .home-title {
   font-size: 2.5rem;
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
 }
 
 .home-form {
@@ -123,16 +123,57 @@ a.navbar-title {
 
 /* Upload button styles */
 .upload-section {
-  margin: 2rem 0;
+  max-width: 600px;
+  width: fit-content;
+  padding: 1rem;
+  margin: 2rem auto;
+  background: var(--background-2);
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.upload-options {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.file-input {
+  padding-right: 1rem;
+  border-right: 1px solid color-mix(in oklab, var(--text) 30%, transparent);
+}
+
+.text-input {
+  padding-left: 1rem;
+}
+
+.file-input h4,
+.text-input h4 {
+  margin: 0 0 10px 0;
+  color: var(--text);
+}
+
+.upload-section textarea {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px;
+  color: var(--text);
+  border: 0;
+  border-radius: 4px;
+  resize: vertical;
+  margin-bottom: 10px;
+}
+
+.upload-section input[type="text"],
+.upload-section input[type="password"] {
+  padding: 10px;
+  border: 0;
+  border-radius: 4px;
 }
 
 .upload-button {
-  padding: 0.75rem 1.5rem;
-  font-size: 1rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
   background-color: var(--primary);
   color: var(--text);
   border: none;

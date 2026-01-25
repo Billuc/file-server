@@ -1,0 +1,72 @@
+---
+import { db, File as DbFile } from "astro:db";
+import { generateRandomKey } from "../utils/generateKey";
+import { isBinaryFile, saveFile } from "../utils/fileUtils";
+import { InternalError } from "@/utils/InternalError";
+
+export const prerender = false;
+
+if (Astro.request.method !== "POST") {
+  throw new InternalError(405, "Method Not Allowed");
+}
+
+// Parse the form data
+const formData = await Astro.request.formData();
+const password = formData.get("password")?.toString();
+
+// Extract file data using our modular method
+const extractedFile = extractFileFromFormData(formData);
+
+// Generate a unique key for the file
+const key = generateRandomKey();
+console.log("Generated key for uploaded file:", key);
+
+// Determine if file is binary
+const isBinary = isBinaryFile(extractedFile.name);
+
+// Calculate expiration date (7 days from now)
+const now = new Date();
+const expiresAt = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
+
+// Save to filesystem
+await saveFile(key, extractedFile);
+
+// Store only file metadata in the database (no content)
+await db.insert(DbFile).values({
+  id: key,
+  name: extractedFile.name,
+  password: password,
+  isBinary: isBinary,
+  expiresAt: expiresAt,
+  createdAt: now,
+});
+
+return Astro.redirect(`/${key}`);
+
+/**
+ * Extracts file data from FormData entry value
+ * Handles File objects, Blobs, and strings
+ */
+function extractFileFromFormData(formData: FormData): File {
+  const file = formData.get("file");
+  const text = formData.get("text");
+  const filename = formData.get("filename")?.toString();
+
+  if (!file && !text) {
+    throw new InternalError(400, "No file or text provided");
+  }
+
+  if (file instanceof File) {
+    console.debug("File upload detected:", file.name);
+    return file;
+  }
+  if (typeof text === "string" && text.trim() !== "") {
+    console.debug(
+      `Text input detected: '${filename ?? "notes.txt"}' '${text}'`,
+    );
+    return new File([text], filename ?? "notes.txt");
+  }
+
+  throw new InternalError(400, "Invalid file or text input");
+}
+---
