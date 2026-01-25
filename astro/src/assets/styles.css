@@ -94,14 +94,27 @@ a.navbar-title {
   margin: 0;
 }
 
-#file-content {
-  background-color: var(--background-2);
-  padding: 1rem;
+.astro-code {
   border-radius: 4px;
-  font-family: monospace;
-  white-space: pre-wrap;
   margin-bottom: 1rem;
   min-height: 200px;
+  padding: 0.5rem;
+  text-align: start;
+}
+
+code {
+  counter-reset: step;
+  counter-increment: step 0;
+}
+
+code .line::before {
+  content: counter(step);
+  counter-increment: step;
+  width: 1rem;
+  margin-right: 1.5rem;
+  display: inline-block;
+  text-align: right;
+  color: color-mix(in oklab, var(--secondary) 40%, transparent 60%);
 }
 
 .file-buttons {
@@ -129,7 +142,8 @@ a.navbar-title {
 /* Upload button styles */
 .upload-section {
   max-width: 600px;
-  width: fit-content;
+  width: 100%;
+  box-sizing: border-box;
   padding: 1rem;
   margin: 2rem auto;
   background: var(--background-2);
@@ -139,6 +153,11 @@ a.navbar-title {
 
 .upload-options {
   display: flex;
+  flex-wrap: wrap;
+}
+
+.upload-options > div {
+  flex: 1;
   margin-bottom: 1rem;
 }
 

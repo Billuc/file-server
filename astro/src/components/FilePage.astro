@@ -1,5 +1,8 @@
 ---
+import { getExtension } from "@/utils/fileUtils";
 import { nullPassword } from "@/utils/passwordUtils";
+import type { CodeLanguage } from "astro";
+import { Code } from "astro:components";
 
 interface Props {
   file: {
@@ -14,6 +17,7 @@ interface Props {
 const { file, fileContent } = Astro.props;
 
 const hasNoPassword = await nullPassword(file.password);
+const extension = getExtension(file.name);
 ---
 
 <section class="file-header">
@@ -45,8 +49,12 @@ const hasNoPassword = await nullPassword(file.password);
   </div>
 </section>
 
-<section>
-  <pre id="file-content">{fileContent}</pre>
+<section id="file-content">
+  <Code
+    code={fileContent}
+    lang={extension as CodeLanguage}
+    theme="catppuccin-latte"
+  />
 </section>
 
 <script>

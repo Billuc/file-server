@@ -85,6 +85,10 @@ export async function saveFile(key: string, file: File): Promise<void> {
   }
 }
 
+export function getExtension(filename: string): string {
+  return filename.split(".").pop()?.toLowerCase() || "";
+}
+
 /**
  * Determines if a file is binary based on its content type
  */
@@ -135,6 +139,6 @@ export function isBinaryFile(filename: string): boolean {
     "img",
   ];
 
-  const extension = filename.split(".").pop()?.toLowerCase();
+  const extension = getExtension(filename);
   return extension ? binaryExtensions.includes(extension) : false;
 }
