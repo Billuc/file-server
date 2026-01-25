@@ -8,7 +8,7 @@ export default async function seed() {
 
   const sampleFiles = [
     {
-      id: "aaaaa-bbbbb-ccccc-ddddd",
+      id: "chien-blanc-chat-noir",
       name: "file1.txt",
       password: null, // No password
       isBinary: false, // Text file
@@ -16,7 +16,7 @@ export default async function seed() {
       createdAt: now,
     },
     {
-      id: "bbbbb-ccccc-ddddd-eeeee",
+      id: "tortue-geniale-lapin-rapide",
       name: "file2.txt",
       password: "secret123", // With password
       isBinary: false, // Text file
@@ -24,7 +24,7 @@ export default async function seed() {
       createdAt: now,
     },
     {
-      id: "ccccc-ddddd-eeeee-fffff",
+      id: "lion-feroce-aigle-agile",
       name: "file3.txt",
       password: null, // No password
       isBinary: true, // Binary file

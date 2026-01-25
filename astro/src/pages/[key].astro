@@ -7,6 +7,7 @@ import { db } from "astro:db";
 import { InternalError } from "@/utils/InternalError";
 import { readTextFile } from "@/utils/fileUtils";
 import Layout from "@/layouts/Layout.astro";
+import FilePage from "@/components/FilePage.astro";
 
 // Astro component script
 const fileId = Astro.params["key"];
@@ -25,6 +26,18 @@ if (file.expiresAt && now > file.expiresAt) {
   throw new InternalError(410, "File has expired");
 }
 
+let passwordConfirmed = !file.password;
+if (file.password && Astro.request.method === "POST") {
+  console.log("Password protected file. Checking password...");
+  const formData = await Astro.request.formData();
+  const password = formData.get("password");
+
+  if (password && password === file.password) {
+    console.log("Password correct.");
+    passwordConfirmed = true;
+  }
+}
+
 let fileContent = "";
 if (file.isBinary) {
   fileContent = "Binary file. Cannot display content.";
@@ -33,67 +46,21 @@ if (file.isBinary) {
 }
 ---
 
-<Layout title={file.name}>
-  <section class="file-header">
-    <h2>{file.name}</h2>
-    {
-      file.password && (
-        <span class="password-protected">🔒 Password Protected</span>
-      )
-    }
-
-    <div class="file-buttons">
-      {
-        !file.isBinary && (
-          <button id="copy-button" class="file-button">
-            Copy
-          </button>
-        )
-      }
-      <form action="/download" method="GET" class="download-form">
-        <input type="hidden" name="key" value={file.id} />
-        {
-          file.password && (
-            <input
-              type="password"
-              name="password"
-              placeholder="Password"
-              required
-            />
-          )
-        }
-        <button type="submit" class="file-button"> Download </button>
+<Layout title={file.password ? "Password Required" : file.name}>
+  {
+    passwordConfirmed ? (
+      <FilePage file={file} fileContent={fileContent} />
+    ) : (
+      <form method="POST" class="password-form">
+        <h2>This file is password protected.</h2>
+        <input
+          type="password"
+          name="password"
+          placeholder="Enter Password"
+          required
+        />
+        <button type="submit">Submit</button>
       </form>
-      <button id="share-button" class="file-button">Share</button>
-    </div>
-  </section>
-
-  <section>
-    <pre id="file-content">{fileContent}</pre>
-  </section>
+    )
+  }
 </Layout>
-
-<script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const copyButton = document.getElementById("copy-button")!;
-    const shareButton = document.getElementById("share-button")!;
-    const fileContent = document.getElementById("file-content")!;
-
-    if (copyButton) {
-      const copyContent = () => {
-        navigator.clipboard.writeText(fileContent.textContent).then(() => {
-          alert("Content copied to clipboard!");
-        });
-      };
-      copyButton.addEventListener("click", copyContent);
-    }
-
-    const shareContent = () => {
-      navigator.clipboard.writeText(window.location.href).then(() => {
-        alert("URL copied to clipboard!");
-      });
-    };
-
-    shareButton.addEventListener("click", shareContent);
-  });
-</script>

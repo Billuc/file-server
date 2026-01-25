@@ -1,0 +1,71 @@
+---
+interface Props {
+  file: {
+    id: string;
+    name: string;
+    isBinary: boolean;
+    password?: string | null;
+  };
+  fileContent: string;
+}
+
+const { file, fileContent } = Astro.props;
+---
+
+<section class="file-header">
+  <h2>{file.name}</h2>
+  {
+    file.password && (
+      <span class="password-protected">🔒 Password Protected</span>
+    )
+  }
+
+  <div class="file-buttons">
+    {
+      !file.isBinary && (
+        <button id="copy-button" class="file-button">
+          Copy
+        </button>
+      )
+    }
+    <form action="/download" method="POST" class="download-form">
+      <input type="hidden" name="key" value={file.id} />
+      {
+        file.password && (
+          <input type="hidden" name="enc" value={file.password} required />
+        )
+      }
+      <button type="submit" class="file-button"> Download </button>
+    </form>
+    <button id="share-button" class="file-button">Share</button>
+  </div>
+</section>
+
+<section>
+  <pre id="file-content">{fileContent}</pre>
+</section>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const copyButton = document.getElementById("copy-button")!;
+    const shareButton = document.getElementById("share-button")!;
+    const fileContent = document.getElementById("file-content")!;
+
+    if (copyButton) {
+      const copyContent = () => {
+        navigator.clipboard.writeText(fileContent.textContent).then(() => {
+          alert("Content copied to clipboard!");
+        });
+      };
+      copyButton.addEventListener("click", copyContent);
+    }
+
+    const shareContent = () => {
+      navigator.clipboard.writeText(window.location.href).then(() => {
+        alert("URL copied to clipboard!");
+      });
+    };
+
+    shareButton.addEventListener("click", shareContent);
+  });
+</script>

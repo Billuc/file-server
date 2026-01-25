@@ -3,16 +3,16 @@ import { db, File as DbFile } from "astro:db";
 import { eq } from "astro:db";
 import { InternalError } from "@/utils/InternalError";
 import { promises as fs } from "fs";
-import path from "path";
 import { getFilePath, fileExists } from "../utils/fileUtils";
 
 export const prerender = false;
 
-export const GET: APIRoute = async ({ url }) => {
+export const POST: APIRoute = async ({ request }) => {
   try {
-    // Extract the key from query parameters
-    const key = url.searchParams.get("key");
-    const password = url.searchParams.get("password");
+    // Extract the key from form data
+    const formData = await request.formData();
+    const key = formData.get("key")?.toString();
+    const enc = formData.get("enc")?.toString();
 
     if (!key) {
       return new Response(JSON.stringify({ error: "No key provided" }), {
@@ -35,8 +35,8 @@ export const GET: APIRoute = async ({ url }) => {
     }
 
     // Check password if required
-    if (file.password && file.password !== password) {
-      return new Response(JSON.stringify({ error: "Password required or incorrect" }), {
+    if (file.password && file.password !== enc) {
+      return new Response(JSON.stringify({ error: "Password is incorrect" }), {
         status: 401,
         headers: { "Content-Type": "application/json" },
       });
@@ -56,7 +56,9 @@ export const GET: APIRoute = async ({ url }) => {
     return new Response(fileContent, {
       status: 200,
       headers: {
-        "Content-Type": file.isBinary ? "application/octet-stream" : "text/plain",
+        "Content-Type": file.isBinary
+          ? "application/octet-stream"
+          : "text/plain",
         "Content-Disposition": `attachment; filename="${file.name}"`,
       },
     });
