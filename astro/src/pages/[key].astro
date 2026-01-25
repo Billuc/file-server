@@ -52,14 +52,17 @@ if (file.isBinary) {
       <FilePage file={file} fileContent={fileContent} />
     ) : (
       <form method="POST" class="password-form">
-        <h2>This file is password protected.</h2>
-        <input
-          type="password"
-          name="password"
-          placeholder="Enter Password"
-          required
-        />
-        <button type="submit">Submit</button>
+        <h2 class="password-form-title">This file is password protected.</h2>
+        <div class="password-input-container">
+          <input
+            type="password"
+            name="password"
+            placeholder="Enter Password"
+            required
+            class="password-input"
+          />
+        </div>
+        <button type="submit" class="password-submit-button">Submit</button>
       </form>
     )
   }
