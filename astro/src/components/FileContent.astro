@@ -1,0 +1,51 @@
+---
+import { getExtension, readTextFile, type FileType } from "@/utils/fileUtils";
+import type { CodeLanguage } from "astro";
+import { Code } from "astro:components";
+
+interface Props {
+  file: {
+    id: string;
+    name: string;
+  };
+  fileType: FileType;
+}
+
+const { file, fileType } = Astro.props;
+const extension = getExtension(file.name);
+
+let fileContent = "";
+if (fileType === "text") {
+  fileContent = await readTextFile(file.id, file.name);
+}
+---
+
+<section id="file-content">
+  <!-- {fileType === "image" && <img src={`/f/${file.id}`} alt={file.name} />}
+  {
+    fileType === "audio" && (
+      <audio controls>
+        <source src={`/f/${file.id}`} />
+        Your browser does not support the audio element.
+      </audio>
+    )
+  }
+  {
+    fileType === "video" && (
+      <video controls>
+        <source src={`/f/${file.id}`} />
+        Your browser does not support the video element.
+      </video>
+    )
+  } -->
+  {fileType !== "text" && <div>Binary file. Cannot display content.</div>}
+  {
+    fileType === "text" && (
+      <Code
+        code={fileContent}
+        lang={extension as CodeLanguage}
+        theme="catppuccin-latte"
+      />
+    )
+  }
+</section>

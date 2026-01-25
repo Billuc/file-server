@@ -5,7 +5,6 @@ import { eq } from "astro:db";
 import { File as DbFile } from "astro:db";
 import { db } from "astro:db";
 import { InternalError } from "@/utils/InternalError";
-import { readTextFile } from "@/utils/fileUtils";
 import { verifyPassword } from "../utils/passwordUtils";
 import Layout from "@/layouts/Layout.astro";
 import FilePage from "@/components/FilePage.astro";
@@ -41,19 +40,12 @@ if (isPasswordValid) {
   console.log("Password correct.");
   passwordConfirmed = true;
 }
-
-let fileContent = "";
-if (file.isBinary) {
-  fileContent = "Binary file. Cannot display content.";
-} else {
-  fileContent = await readTextFile(file.id, file.name);
-}
 ---
 
 <Layout title={file.password ? "Password Required" : file.name}>
   {
     passwordConfirmed ? (
-      <FilePage file={file} fileContent={fileContent} />
+      <FilePage file={file} />
     ) : (
       <form method="POST" class="password-form">
         <h2>This file is password protected.</h2>

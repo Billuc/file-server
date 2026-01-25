@@ -3,7 +3,7 @@ import { db, File as DbFile } from "astro:db";
 import { eq } from "astro:db";
 import { InternalError } from "@/utils/InternalError";
 import { promises as fs } from "fs";
-import { getFilePath, fileExists } from "../utils/fileUtils";
+import { getFilePath, fileExists, getFileType } from "../utils/fileUtils";
 
 export const prerender = false;
 
@@ -56,9 +56,10 @@ export const POST: APIRoute = async ({ request }) => {
     return new Response(fileContent, {
       status: 200,
       headers: {
-        "Content-Type": file.isBinary
-          ? "application/octet-stream"
-          : "text/plain",
+        "Content-Type":
+          getFileType(file.name) !== "text"
+            ? "application/octet-stream"
+            : "text/plain",
         "Content-Disposition": `attachment; filename="${file.name}"`,
       },
     });

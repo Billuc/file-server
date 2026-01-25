@@ -1,7 +1,7 @@
 ---
 import { db, File as DbFile } from "astro:db";
 import { generateRandomKey } from "../utils/generateKey";
-import { isBinaryFile, saveFile } from "../utils/fileUtils";
+import { saveFile } from "../utils/fileUtils";
 import { InternalError } from "@/utils/InternalError";
 import { hashPassword } from "../utils/passwordUtils";
 
@@ -23,9 +23,6 @@ const extractedFile = extractFileFromFormData(formData);
 const key = generateRandomKey();
 console.log("Generated key for uploaded file:", key);
 
-// Determine if file is binary
-const isBinary = isBinaryFile(extractedFile.name);
-
 // Calculate expiration date (7 days from now)
 const now = new Date();
 const expiresAt = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
@@ -38,7 +35,6 @@ await db.insert(DbFile).values({
   id: key,
   name: extractedFile.name,
   password: hashedPassword, // Store hashed password
-  isBinary: isBinary,
   expiresAt: expiresAt,
   createdAt: now,
 });
@@ -59,6 +55,9 @@ function extractFileFromFormData(formData: FormData): File {
   }
 
   if (file instanceof File) {
+    if (file.size === 0) {
+      throw new InternalError(400, "Uploaded file is empty");
+    }
     console.debug("File upload detected:", file.name);
     return file;
   }

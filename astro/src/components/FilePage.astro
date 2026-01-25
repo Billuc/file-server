@@ -1,23 +1,20 @@
 ---
-import { getExtension } from "@/utils/fileUtils";
+import { getFileType } from "@/utils/fileUtils";
 import { nullPassword } from "@/utils/passwordUtils";
-import type { CodeLanguage } from "astro";
-import { Code } from "astro:components";
+import FileContent from "./FileContent.astro";
 
 interface Props {
   file: {
     id: string;
     name: string;
-    isBinary: boolean;
     password: string;
   };
-  fileContent: string;
 }
 
-const { file, fileContent } = Astro.props;
+const { file } = Astro.props;
 
 const hasNoPassword = await nullPassword(file.password);
-const extension = getExtension(file.name);
+const fileType = getFileType(file.name);
 ---
 
 <section class="file-header">
@@ -33,7 +30,7 @@ const extension = getExtension(file.name);
 
   <div class="file-buttons">
     {
-      !file.isBinary && (
+      fileType === "text" && (
         <button id="copy-button" class="file-button">
           Copy
         </button>
@@ -49,13 +46,7 @@ const extension = getExtension(file.name);
   </div>
 </section>
 
-<section id="file-content">
-  <Code
-    code={fileContent}
-    lang={extension as CodeLanguage}
-    theme="catppuccin-latte"
-  />
-</section>
+<FileContent file={file} fileType={fileType} />
 
 <script>
   document.addEventListener("DOMContentLoaded", () => {

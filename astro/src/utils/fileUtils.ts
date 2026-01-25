@@ -2,6 +2,49 @@ import { promises as fs } from "fs";
 import path from "path";
 import { InternalError } from "./InternalError";
 
+export type FileType = "image" | "audio" | "video" | "binary" | "text";
+
+const MAX_FILE_PREVIEW_SIZE = 2 * 1024 * 1024; // 2 MB
+const IMAGE_EXTENSIONS = [
+  "jpg",
+  "jpeg",
+  "png",
+  "gif",
+  "bmp",
+  "webp",
+  "svg",
+  "ico",
+];
+const AUDIO_EXTENSIONS = ["mp3", "wav", "ogg", "flac", "aac", "m4a"];
+const VIDEO_EXTENSIONS = ["mp4", "avi", "mkv", "mov", "wmv", "flv", "webm"];
+const OTHER_BINARY_EXTENSIONS = [
+  // Documents
+  "pdf",
+  "doc",
+  "docx",
+  "xls",
+  "xlsx",
+  "ppt",
+  "pptx",
+  // Archives
+  "zip",
+  "rar",
+  "tar",
+  "gz",
+  "7z",
+  // Executables
+  "exe",
+  "dll",
+  "so",
+  "dmg",
+  "app",
+  // Other
+  "bin",
+  "dat",
+  "iso",
+  "img",
+];
+
 /**
  * Gets the file path for a given key and filename
  */
@@ -24,8 +67,8 @@ export async function readTextFile(
     const fileHandle = await fs.open(filePath, "r");
     const stats = await fileHandle.stat();
 
-    if (stats.size > 2 * 1024 * 1024) {
-      let buffer = Buffer.alloc(2 * 1024 * 1024); // 2 MB buffer
+    if (stats.size > MAX_FILE_PREVIEW_SIZE) {
+      let buffer = Buffer.alloc(MAX_FILE_PREVIEW_SIZE); // 2 MB buffer
       let offset = buffer.write(
         "File too large, showing first 2MB only... Download to get the full file !\n\n",
         "utf8",
@@ -112,53 +155,20 @@ export function getExtension(filename: string): string {
 /**
  * Determines if a file is binary based on its content type
  */
-export function isBinaryFile(filename: string): boolean {
-  const binaryExtensions = [
-    // Images
-    "jpg",
-    "jpeg",
-    "png",
-    "gif",
-    "bmp",
-    "webp",
-    "svg",
-    "ico",
-    // Documents
-    "pdf",
-    "doc",
-    "docx",
-    "xls",
-    "xlsx",
-    "ppt",
-    "pptx",
-    // Archives
-    "zip",
-    "rar",
-    "tar",
-    "gz",
-    "7z",
-    // Executables
-    "exe",
-    "dll",
-    "so",
-    "dmg",
-    "app",
-    // Audio/Video
-    "mp3",
-    "wav",
-    "ogg",
-    "mp4",
-    "avi",
-    "mkv",
-    "mov",
-    "wmv",
-    // Other
-    "bin",
-    "dat",
-    "iso",
-    "img",
-  ];
-
+export function getFileType(filename: string): FileType {
   const extension = getExtension(filename);
-  return extension ? binaryExtensions.includes(extension) : false;
+
+  if (IMAGE_EXTENSIONS.includes(extension)) {
+    return "image";
+  }
+  if (AUDIO_EXTENSIONS.includes(extension)) {
+    return "audio";
+  }
+  if (VIDEO_EXTENSIONS.includes(extension)) {
+    return "video";
+  }
+  if (OTHER_BINARY_EXTENSIONS.includes(extension)) {
+    return "binary";
+  }
+  return "text";
 }
