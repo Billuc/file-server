@@ -21,7 +21,27 @@ export async function readTextFile(
   const filePath = getFilePath(key, filename);
 
   try {
-    const content = await fs.readFile(filePath, "utf-8");
+    const fileHandle = await fs.open(filePath, "r");
+    const stats = await fileHandle.stat();
+
+    if (stats.size > 2 * 1024 * 1024) {
+      let buffer = Buffer.alloc(2 * 1024 * 1024); // 2 MB buffer
+      let offset = buffer.write(
+        "File too large, showing first 2MB only... Download to get the full file !\n\n",
+        "utf8",
+      );
+      const result = await fileHandle.read(
+        buffer,
+        offset,
+        buffer.length - offset,
+        0,
+      );
+      await fileHandle.close();
+      return result.buffer.toString("utf8");
+    }
+
+    const content = await fileHandle.readFile("utf-8");
+    await fileHandle.close();
     return content;
   } catch (error) {
     console.error(`Failed to read file from filesystem: ${filePath}`, error);
