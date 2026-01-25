@@ -8,7 +8,11 @@ import Layout from "@/layouts/Layout.astro";
   <SearchBar />
   <div class="upload-section">
     <button id="upload-button" class="upload-button">Upload File</button>
-    <input type="file" id="file-input" accept=".txt" style="display: none;" />
+    <input type="file" id="file-input" style="display: none;" />
+    <div id="password-section" class="password-section" style="display: none;">
+      <label for="file-password">Password (optional):</label>
+      <input type="password" id="file-password" placeholder="Enter password" />
+    </div>
   </div>
 </Layout>
 
@@ -16,6 +20,8 @@ import Layout from "@/layouts/Layout.astro";
   document.addEventListener("DOMContentLoaded", () => {
     const uploadButton = document.getElementById("upload-button")!;
     const fileInput = document.getElementById("file-input")!;
+    const passwordSection = document.getElementById("password-section")!;
+    const passwordInput = document.getElementById("file-password")!;
 
     uploadButton.addEventListener("click", () => {
       fileInput.click();
@@ -25,15 +31,17 @@ import Layout from "@/layouts/Layout.astro";
       const file = (event.target as HTMLInputElement).files?.[0];
       if (!file) return;
 
-      // Only allow text files
-      if (!file.name.endsWith(".txt")) {
-        alert("Only .txt files are allowed");
-        return;
-      }
+      // Show password section when file is selected
+      passwordSection.style.display = "block";
 
       try {
         const formData = new FormData();
         formData.append("file", file);
+        
+        // Add password if provided
+        if (passwordInput.value) {
+          formData.append("password", passwordInput.value);
+        }
 
         const response = await fetch("/upload", {
           method: "POST",

@@ -2,6 +2,9 @@ import type { APIRoute } from "astro";
 import { db, File as DbFile } from "astro:db";
 import { eq } from "astro:db";
 import { InternalError } from "@/utils/InternalError";
+import { promises as fs } from "fs";
+import path from "path";
+import { getFilePath, fileExists } from "../utils/fileUtils";
 
 export const prerender = false;
 
@@ -9,6 +12,7 @@ export const GET: APIRoute = async ({ url }) => {
   try {
     // Extract the key from query parameters
     const key = url.searchParams.get("key");
+    const password = url.searchParams.get("password");
 
     if (!key) {
       return new Response(JSON.stringify({ error: "No key provided" }), {
@@ -17,18 +21,42 @@ export const GET: APIRoute = async ({ url }) => {
       });
     }
 
-    // Fetch the file from the database
+    // Fetch the file metadata from the database
     const file = await db.select().from(DbFile).where(eq(DbFile.id, key)).get();
 
     if (!file) {
       throw new InternalError(404, "File Not Found");
     }
 
+    // Check if file has expired
+    const now = new Date();
+    if (file.expiresAt && now > file.expiresAt) {
+      throw new InternalError(410, "File has expired");
+    }
+
+    // Check password if required
+    if (file.password && file.password !== password) {
+      return new Response(JSON.stringify({ error: "Password required or incorrect" }), {
+        status: 401,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
+    // Check if file exists on filesystem
+    const fileExistsOnFs = await fileExists(key, file.name);
+    if (!fileExistsOnFs) {
+      throw new InternalError(404, "File Not Found on filesystem");
+    }
+
+    // Read file from filesystem
+    const filePath = getFilePath(key, file.name);
+    const fileContent = await fs.readFile(filePath);
+
     // Create a downloadable response
-    return new Response(file.content, {
+    return new Response(fileContent, {
       status: 200,
       headers: {
-        "Content-Type": "application/octet-stream",
+        "Content-Type": file.isBinary ? "application/octet-stream" : "text/plain",
         "Content-Disposition": `attachment; filename="${file.name}"`,
       },
     });

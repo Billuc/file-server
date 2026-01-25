@@ -2,21 +2,34 @@ import { db, File } from "astro:db";
 
 // https://astro.build/db/seed
 export default async function seed() {
+  // Calculate expiration date (7 days from now)
+  const now = new Date();
+  const expiresAt = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
+
   const sampleFiles = [
     {
       id: "aaaaa-bbbbb-ccccc-ddddd",
       name: "file1.txt",
-      content: "This is the content of File 1.",
+      password: null, // No password
+      isBinary: false, // Text file
+      expiresAt: expiresAt,
+      createdAt: now,
     },
     {
       id: "bbbbb-ccccc-ddddd-eeeee",
       name: "file2.txt",
-      content: "This is the content of File 2.",
+      password: "secret123", // With password
+      isBinary: false, // Text file
+      expiresAt: expiresAt,
+      createdAt: now,
     },
     {
       id: "ccccc-ddddd-eeeee-fffff",
       name: "file3.txt",
-      content: "This is the content of File 3.",
+      password: null, // No password
+      isBinary: true, // Binary file
+      expiresAt: expiresAt,
+      createdAt: now,
     },
   ];
 

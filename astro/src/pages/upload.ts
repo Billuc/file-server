@@ -1,8 +1,7 @@
 import type { APIRoute } from "astro";
 import { db, File as DbFile } from "astro:db";
 import { generateRandomKey } from "../utils/generateKey";
-import { promises as fs } from "fs";
-import path from "path";
+import { isBinaryFile, saveFile } from "../utils/fileUtils";
 
 export const prerender = false;
 
@@ -21,31 +20,13 @@ function extractFileFromFormData(
   return new File([String(file)], filename);
 }
 
-/**
- * Saves file content to the filesystem
- * Creates uploads directory if it doesn't exist
- */
-async function saveFileToFilesystem(key: string, file: File): Promise<void> {
-  try {
-    const uploadsDir = path.join(process.cwd(), "uploads");
-    await fs.mkdir(uploadsDir, { recursive: true });
-
-    const filePath = path.join(uploadsDir, key + "__" + file.name);
-    await fs.writeFile(filePath, file.stream());
-    console.log(`File saved to filesystem: ${filePath}`);
-  } catch (error) {
-    console.error("Failed to save file to filesystem:", error);
-    // Re-throw to allow caller to handle the error if needed
-    throw error;
-  }
-}
-
 export const POST: APIRoute = async ({ request }) => {
   try {
     // Parse the form data
     const formData = await request.formData();
     const file = formData.get("file");
     const name = formData.get("name")?.toString();
+    const password = formData.get("password")?.toString() || null;
 
     if (!file) {
       return new Response(JSON.stringify({ error: "No file provided" }), {
@@ -55,23 +36,30 @@ export const POST: APIRoute = async ({ request }) => {
     }
 
     // Extract file data using our modular method
-    const extractedFile = await extractFileFromFormData(
-      file,
-      name || "unknown.txt",
-    );
+    const extractedFile = extractFileFromFormData(file, name || "unknown.txt");
 
     // Generate a unique key for the file
     const key = generateRandomKey();
     console.log("Generated key for uploaded file:", key);
 
-    // Save to filesystem
-    await saveFileToFilesystem(key, extractedFile);
+    // Determine if file is binary
+    const isBinary = isBinaryFile(extractedFile.name);
 
-    // Store the file in the database
+    // Calculate expiration date (7 days from now)
+    const now = new Date();
+    const expiresAt = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
+
+    // Save to filesystem
+    await saveFile(key, extractedFile);
+
+    // Store only file metadata in the database (no content)
     await db.insert(DbFile).values({
       id: key,
       name: extractedFile.name,
-      content: await extractedFile.text(),
+      password: password,
+      isBinary: isBinary,
+      expiresAt: expiresAt,
+      createdAt: now,
     });
 
     return new Response(JSON.stringify({ key }), {

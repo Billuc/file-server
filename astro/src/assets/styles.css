@@ -124,6 +124,10 @@ a.navbar-title {
 /* Upload button styles */
 .upload-section {
   margin: 2rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
 }
 
 .upload-button {
@@ -139,6 +143,34 @@ a.navbar-title {
 
 .upload-button:hover {
   background-color: color-mix(in oklab, var(--primary) 80%, transparent 20%);
+}
+
+/* Password section styles */
+.password-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.password-section label {
+  font-size: 0.9rem;
+  color: var(--secondary);
+}
+
+.password-section input {
+  padding: 0.5rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 250px;
+}
+
+/* File page enhancements */
+.password-protected {
+  margin-left: 0.5rem;
+  color: #e74c3c;
+  font-size: 0.9rem;
 }
 
 /* Search bar styles */
