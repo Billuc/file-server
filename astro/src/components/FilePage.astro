@@ -18,11 +18,14 @@ const hasNoPassword = await nullPassword(file.password);
 
 <section class="file-header">
   <h2>{file.name}</h2>
+  <span>(<i style="user-select: all">{file.id}</i>)</span>
   {
     !hasNoPassword && (
       <span class="password-protected">🔒 Password Protected</span>
     )
   }
+
+  <div class="spacer"></div>
 
   <div class="file-buttons">
     {

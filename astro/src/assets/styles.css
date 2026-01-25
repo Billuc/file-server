@@ -55,6 +55,10 @@ main {
   background-color: color-mix(in oklab, var(--primary) 80%, transparent 20%);
 }
 
+.spacer {
+  flex-grow: 1;
+}
+
 /* Updated Navbar styles */
 header.navbar {
   display: flex;
@@ -80,8 +84,9 @@ a.navbar-title {
 /* File page styles */
 .file-header {
   display: flex;
-  justify-content: space-between;
+  flex-wrap: wrap;
   align-items: center;
+  gap: 0.5rem;
   margin-bottom: 1rem;
 }
 
@@ -209,7 +214,6 @@ a.navbar-title {
 
 /* File page enhancements */
 .password-protected {
-  margin-left: 0.5rem;
   color: #e74c3c;
   font-size: 0.9rem;
 }
