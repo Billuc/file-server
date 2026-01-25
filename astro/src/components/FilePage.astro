@@ -1,21 +1,25 @@
 ---
+import { nullPassword } from "@/utils/passwordUtils";
+
 interface Props {
   file: {
     id: string;
     name: string;
     isBinary: boolean;
-    password?: string | null;
+    password: string;
   };
   fileContent: string;
 }
 
 const { file, fileContent } = Astro.props;
+
+const hasNoPassword = await nullPassword(file.password);
 ---
 
 <section class="file-header">
   <h2>{file.name}</h2>
   {
-    file.password && (
+    !hasNoPassword && (
       <span class="password-protected">🔒 Password Protected</span>
     )
   }
@@ -30,11 +34,8 @@ const { file, fileContent } = Astro.props;
     }
     <form action="/download" method="POST" class="download-form">
       <input type="hidden" name="key" value={file.id} />
-      {
-        file.password && (
-          <input type="hidden" name="enc" value={file.password} required />
-        )
-      }
+
+      <input type="hidden" name="enc" value={file.password} required />
       <button type="submit" class="file-button"> Download </button>
     </form>
     <button id="share-button" class="file-button">Share</button>

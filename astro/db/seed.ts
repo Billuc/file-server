@@ -1,3 +1,4 @@
+import { hashPassword } from "@/utils/passwordUtils";
 import { db, File } from "astro:db";
 
 // https://astro.build/db/seed
@@ -10,7 +11,7 @@ export default async function seed() {
     {
       id: "chien-blanc-chat-noir",
       name: "file1.txt",
-      password: null, // No password
+      password: await hashPassword(""), // No password
       isBinary: false, // Text file
       expiresAt: expiresAt,
       createdAt: now,
@@ -18,7 +19,7 @@ export default async function seed() {
     {
       id: "tortue-geniale-lapin-rapide",
       name: "file2.txt",
-      password: "secret123", // With password
+      password: await hashPassword("secret123"), // With password
       isBinary: false, // Text file
       expiresAt: expiresAt,
       createdAt: now,
@@ -26,7 +27,7 @@ export default async function seed() {
     {
       id: "lion-feroce-aigle-agile",
       name: "file3.txt",
-      password: null, // No password
+      password: await hashPassword(""), // No password
       isBinary: true, // Binary file
       expiresAt: expiresAt,
       createdAt: now,

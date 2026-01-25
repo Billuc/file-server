@@ -4,7 +4,7 @@ const File = defineTable({
   columns: {
     id: column.text(), // Random key format '[a-z]+(-[a-z]+){3}'
     name: column.text(),
-    password: column.text({ optional: true }), // Optional password for file access
+    password: column.text(), // Hashed password for file access
     isBinary: column.boolean(), // Flag indicating if file is binary
     expiresAt: column.date(), // Expiration date (default: 7 days from creation)
     createdAt: column.date(), // Creation timestamp

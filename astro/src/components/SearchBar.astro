@@ -34,6 +34,6 @@
   }
 
   document
-    .querySelector(".search-bar")
-    ?.addEventListener("submit", onFileSearch);
+    .querySelectorAll(".search-bar")
+    .forEach((el) => el.addEventListener("submit", onFileSearch));
 </script>

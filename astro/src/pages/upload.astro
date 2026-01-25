@@ -3,6 +3,7 @@ import { db, File as DbFile } from "astro:db";
 import { generateRandomKey } from "../utils/generateKey";
 import { isBinaryFile, saveFile } from "../utils/fileUtils";
 import { InternalError } from "@/utils/InternalError";
+import { hashPassword } from "../utils/passwordUtils";
 
 export const prerender = false;
 
@@ -12,7 +13,8 @@ if (Astro.request.method !== "POST") {
 
 // Parse the form data
 const formData = await Astro.request.formData();
-const password = formData.get("password")?.toString();
+const password = formData.get("password")?.toString() ?? "";
+const hashedPassword = await hashPassword(password);
 
 // Extract file data using our modular method
 const extractedFile = extractFileFromFormData(formData);
@@ -35,7 +37,7 @@ await saveFile(key, extractedFile);
 await db.insert(DbFile).values({
   id: key,
   name: extractedFile.name,
-  password: password,
+  password: hashedPassword, // Store hashed password
   isBinary: isBinary,
   expiresAt: expiresAt,
   createdAt: now,

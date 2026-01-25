@@ -6,6 +6,7 @@ import { File as DbFile } from "astro:db";
 import { db } from "astro:db";
 import { InternalError } from "@/utils/InternalError";
 import { readTextFile } from "@/utils/fileUtils";
+import { verifyPassword } from "../utils/passwordUtils";
 import Layout from "@/layouts/Layout.astro";
 import FilePage from "@/components/FilePage.astro";
 
@@ -26,16 +27,19 @@ if (file.expiresAt && now > file.expiresAt) {
   throw new InternalError(410, "File has expired");
 }
 
-let passwordConfirmed = !file.password;
-if (file.password && Astro.request.method === "POST") {
-  console.log("Password protected file. Checking password...");
-  const formData = await Astro.request.formData();
-  const password = formData.get("password");
+let passwordConfirmed = false;
+let password = "";
+console.log("Checking password...");
 
-  if (password && password === file.password) {
-    console.log("Password correct.");
-    passwordConfirmed = true;
-  }
+if (Astro.request.method === "POST") {
+  const formData = await Astro.request.formData();
+  password = formData.get("password")?.toString() ?? "";
+}
+
+const isPasswordValid = await verifyPassword(password, file.password);
+if (isPasswordValid) {
+  console.log("Password correct.");
+  passwordConfirmed = true;
 }
 
 let fileContent = "";
@@ -62,7 +66,9 @@ if (file.isBinary) {
             class="password-input"
           />
         </div>
-        <button type="submit" class="password-submit-button">Submit</button>
+        <button type="submit" class="password-submit-button">
+          Submit
+        </button>
       </form>
     )
   }

@@ -35,7 +35,7 @@ export const POST: APIRoute = async ({ request }) => {
     }
 
     // Check password if required
-    if (file.password && file.password !== enc) {
+    if (file.password !== enc) {
       return new Response(JSON.stringify({ error: "Password is incorrect" }), {
         status: 401,
         headers: { "Content-Type": "application/json" },

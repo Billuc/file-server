@@ -11,7 +11,8 @@
   "dependencies": {
     "@astrojs/db": "^0.18.3",
     "@astrojs/node": "^9.5.2",
-    "astro": "^5.16.11"
+    "astro": "^5.16.11",
+    "bcryptjs": "^3.0.3"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.6",
