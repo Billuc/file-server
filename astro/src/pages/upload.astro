@@ -20,7 +20,7 @@ const hashedPassword = await hashPassword(password);
 const extractedFile = extractFileFromFormData(formData);
 
 // Generate a unique key for the file
-const key = generateRandomKey();
+const key = await generateRandomKey();
 console.log("Generated key for uploaded file:", key);
 
 // Calculate expiration date (7 days from now)
