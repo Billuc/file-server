@@ -57,7 +57,7 @@ def filter_nouns(data: list[Dict[str, str]]) -> list[Dict[str, str]]:
             continue
         # if row['categorie'] == "autres noms animés":
         #     row['categorie'] = "autres"
-        row['nom'] = row["nom"].replace("é", "e").replace("è", "e").replace("ê", "e").replace("à", "a").replace("ç", "c").replace("î", "i").replace("ô", "o").replace("ï", "i").replace("â", "a")
+        row['nom'] = row["nom"].replace("é", "e").replace("è", "e").replace("ê", "e").replace("à", "a").replace("ç", "c").replace("î", "i").replace("ô", "o").replace("ï", "i").replace("â", "a").replace("û", "u")
         valid_data.append(row)
     return valid_data
 
