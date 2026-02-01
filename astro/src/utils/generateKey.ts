@@ -27,17 +27,18 @@ class KeyGenerator {
   }
 
   static async create(): Promise<KeyGenerator> {
-    const nounsFile = await readFile("src/assets/keys/nouns.csv", "utf-8");
-    const adjectivesFile = await readFile(
-      "src/assets/keys/adjectives.csv",
-      "utf-8",
-    );
+    const nounsFile = await readFile("src/assets/nouns.csv", "utf-8");
+    const adjectivesFile = await readFile("src/assets/adjectives.csv", "utf-8");
 
-    const nouns = nounsFile.split("\n").map((line) => {
-      const [word, gender] = line.split(",");
-      return new Noun(word, gender as "m" | "f");
-    });
+    const nouns = nounsFile
+      .replaceAll("\r\n", "\n")
+      .split("\n")
+      .map((line) => {
+        const [word, gender] = line.split(",");
+        return new Noun(word, gender as "m" | "f");
+      });
     const adjectives: [string, string][] = adjectivesFile
+      .replaceAll("\r\n", "\n")
       .split("\n")
       .map((line) => {
         const [masculine, feminine] = line.split(",");
