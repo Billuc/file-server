@@ -1,0 +1,11 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { generateRandomKey } from "@/utils/generateKey";
+
+const key = generateRandomKey();
+---
+
+<Layout title="Generated Key">
+  <span>{key}</span>
+  <button onclick="location.reload()">Generate New Key</button>
+</Layout>
