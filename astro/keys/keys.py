@@ -27,7 +27,7 @@ def write_csv(file_path, data, fieldnames):
         
     with open(file_path, mode='w', newline='', encoding='utf-8') as csvfile:
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames, extrasaction='ignore')
-        writer.writeheader()
+        # writer.writeheader()
         writer.writerows(data)
 
 def read_all_csvs(folder_path, fieldnames) -> list[Dict[str, str]]:
