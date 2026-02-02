@@ -36,12 +36,14 @@ const fileType = getFileType(file.name);
         </button>
       )
     }
-    <form action="/download" method="POST" class="download-form">
-      <input type="hidden" name="key" value={file.id} />
-
-      <input type="hidden" name="enc" value={file.password} required />
-      <button type="submit" class="file-button"> Download </button>
-    </form>
+    <a
+      href={`/f/${file.id}?download=true&enc=${encodeURIComponent(
+        file.password,
+      )}`}
+      class="file-button"
+    >
+      Download
+    </a>
     <button id="share-button" class="file-button">Share</button>
   </div>
 </section>

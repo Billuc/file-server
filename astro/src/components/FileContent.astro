@@ -7,6 +7,7 @@ interface Props {
   file: {
     id: string;
     name: string;
+    password: string;
   };
   fileType: FileType;
 }
@@ -21,11 +22,20 @@ if (fileType === "text") {
 ---
 
 <section id="file-content">
-  <!-- {fileType === "image" && <img src={`/f/${file.id}`} alt={file.name} />}
+  {
+    fileType === "image" && (
+      <img
+        src={`/f/${file.id}?enc=${encodeURIComponent(file.password)}`}
+        alt={file.name}
+      />
+    )
+  }
   {
     fileType === "audio" && (
       <audio controls>
-        <source src={`/f/${file.id}`} />
+        <source
+          src={`/f/${file.id}?enc=${encodeURIComponent(file.password)}`}
+        />
         Your browser does not support the audio element.
       </audio>
     )
@@ -33,12 +43,14 @@ if (fileType === "text") {
   {
     fileType === "video" && (
       <video controls>
-        <source src={`/f/${file.id}`} />
+        <source
+          src={`/f/${file.id}?enc=${encodeURIComponent(file.password)}`}
+        />
         Your browser does not support the video element.
       </video>
     )
-  } -->
-  {fileType !== "text" && <div>Binary file. Cannot display content.</div>}
+  }
+  {fileType === "binary" && <div>Binary file. Cannot display content.</div>}
   {
     fileType === "text" && (
       <Code

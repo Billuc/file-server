@@ -3,22 +3,18 @@ import { db, files } from "astro:db";
 import { eq } from "astro:db";
 import { InternalError } from "@/utils/InternalError";
 import { promises as fs } from "fs";
-import { getFilePath, fileExists, getFileType } from "../utils/fileUtils";
+import { getFilePath, fileExists, getFileType } from "../../utils/fileUtils";
 
 export const prerender = false;
 
-export const POST: APIRoute = async ({ request }) => {
+export const GET: APIRoute = async ({ params, url }) => {
   try {
-    // Extract the key from form data
-    const formData = await request.formData();
-    const key = formData.get("key")?.toString();
-    const enc = formData.get("enc")?.toString();
+    const key = params.key;
+    const enc = url.searchParams.get("enc");
+    const download = url.searchParams.get("download") === "true";
 
     if (!key) {
-      return new Response(JSON.stringify({ error: "No key provided" }), {
-        status: 400,
-        headers: { "Content-Type": "application/json" },
-      });
+      throw new InternalError(400, "No key provided");
     }
 
     // Fetch the file metadata from the database
@@ -52,16 +48,20 @@ export const POST: APIRoute = async ({ request }) => {
     const filePath = getFilePath(key, file.name);
     const fileContent = await fs.readFile(filePath);
 
+    const headers: HeadersInit = {
+      "Content-Type":
+        getFileType(file.name) !== "text"
+          ? "application/octet-stream"
+          : "text/plain",
+      "Content-Disposition": download
+        ? `attachment; filename="${file.name}"`
+        : `inline; filename="${file.name}"`,
+    };
+
     // Create a downloadable response
     return new Response(fileContent, {
       status: 200,
-      headers: {
-        "Content-Type":
-          getFileType(file.name) !== "text"
-            ? "application/octet-stream"
-            : "text/plain",
-        "Content-Disposition": `attachment; filename="${file.name}"`,
-      },
+      headers,
     });
   } catch (error) {
     console.error("Error processing download:", error);
