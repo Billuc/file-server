@@ -1,6 +1,6 @@
 import { defineDb, defineTable, column } from "astro:db";
 
-const File = defineTable({
+const filesTable = defineTable({
   columns: {
     id: column.text(), // Random key format '[a-z]+(-[a-z]+){3}'
     name: column.text(),
@@ -13,6 +13,6 @@ const File = defineTable({
 // https://astro.build/db/config
 export default defineDb({
   tables: {
-    File,
+    files: filesTable,
   },
 });

@@ -2,7 +2,7 @@
 export const prerender = false;
 
 import { eq } from "astro:db";
-import { File as DbFile } from "astro:db";
+import { files } from "astro:db";
 import { db } from "astro:db";
 import { InternalError } from "@/utils/InternalError";
 import { verifyPassword } from "../utils/passwordUtils";
@@ -13,7 +13,7 @@ import FilePage from "@/components/FilePage.astro";
 const fileId = Astro.params["key"];
 
 let file = fileId
-  ? await db.select().from(DbFile).where(eq(DbFile.id, fileId)).get()
+  ? await db.select().from(files).where(eq(files.id, fileId)).get()
   : null;
 
 if (!file) {

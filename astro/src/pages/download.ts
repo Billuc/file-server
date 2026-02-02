@@ -1,5 +1,5 @@
 import type { APIRoute } from "astro";
-import { db, File as DbFile } from "astro:db";
+import { db, files } from "astro:db";
 import { eq } from "astro:db";
 import { InternalError } from "@/utils/InternalError";
 import { promises as fs } from "fs";
@@ -22,7 +22,7 @@ export const POST: APIRoute = async ({ request }) => {
     }
 
     // Fetch the file metadata from the database
-    const file = await db.select().from(DbFile).where(eq(DbFile.id, key)).get();
+    const file = await db.select().from(files).where(eq(files.id, key)).get();
 
     if (!file) {
       throw new InternalError(404, "File Not Found");

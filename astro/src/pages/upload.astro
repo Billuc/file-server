@@ -1,5 +1,5 @@
 ---
-import { db, File as DbFile } from "astro:db";
+import { db, files } from "astro:db";
 import { generateRandomKey } from "../utils/generateKey";
 import { saveFile } from "../utils/fileUtils";
 import { InternalError } from "@/utils/InternalError";
@@ -31,7 +31,7 @@ const expiresAt = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
 await saveFile(key, extractedFile);
 
 // Store only file metadata in the database (no content)
-await db.insert(DbFile).values({
+await db.insert(files).values({
   id: key,
   name: extractedFile.name,
   password: hashedPassword, // Store hashed password
