@@ -36,7 +36,6 @@ instable,instable
 fort,forte
 faible,faible
 puissant,puissante
-impotent,impotente
 rapide,rapide
 lent,lente
 vif,vive
@@ -186,7 +185,6 @@ cramponne,cramponnee
 ancre,ancree
 desancre,desancree
 fixe,fixee
-defixe,defixee
 attache,attachee
 detache,detachee
 lie,liee
@@ -198,7 +196,6 @@ libere,liberee
 captif,captive
 libre,libre
 encage,encagee
-decage,decagee
 enferme,enfermee
 ouvert,ouverte
 scelle,scellee
@@ -287,10 +284,8 @@ violet,violette
 orange,orange
 marron,marron
 beige,beige
-or,or
-argent,argent
-cuivre,cuivre
-bronze,bronze
+cuivre,cuivree
+bronze,bronzee
 dore,doree
 argente,argentee
 ecarlate,ecarlate
@@ -298,11 +293,7 @@ pourpre,pourpre
 mauve,mauve
 indigo,indigo
 turquoise,turquoise
-emeraude,emeraude
-rubis,rubis
-ambre,ambre
 kaki,kaki
-bordeaux,bordeaux
 cramoisi,cramoisie
 rond,ronde
 carre,carree
@@ -339,16 +330,13 @@ ordonne,ordonnee
 original,originale
 different,differente
 semblable,semblable
-analogue,analogue
 adapte,adaptee
 inadapte,inadaptee
-compatible,compatible
 coherent,coherente
 logique,logique
 illogique,illogique
 abstrait,abstraite
 concret,concrete
-theorique,theorique
 pratique,pratique
 applique,appliquee
 utile,utile
@@ -357,7 +345,6 @@ precieux,precieuse
 banal,banale
 commun,commune
 rare,rare
-frequent,frequente
 mobile,mobile
 inerte,inerte
 anime,animee
@@ -367,7 +354,6 @@ structure,structuree
 disperse,dispersee
 concentre,concentree
 dilue,diluee
-aride,aride
 immerge,immergee
 submerge,submergee
 flottant,flottante
@@ -411,8 +397,6 @@ pale,pale
 fonce,foncee
 vide,videe
 empli,emplie
-petrie,petrie
-malaxe,malaxee
 modifie,modifiee
 altere,alteree
 conserve,conservee
@@ -435,13 +419,10 @@ imprudent,imprudente
 sage,sage
 fou,folle
 stupide,stupide
-mediocre,mediocre
 cultive,cultivee
 ignorant,ignorante
 savant,savante
-novice,novice
 expert,experte
-amateur,amatrice
 competent,competente
 ambitieux,ambitieuse
 modeste,modeste
@@ -522,3 +503,10 @@ fanatique,fanatique
 hardi,hardie
 timore,timoree
 intrepide,intrepide
+nacre,nacree
+irise,irisee
+exuberant,exuberante
+rayonnant,rayonnante
+epique,epique
+legendaire,legendaire
+mythique,mythique

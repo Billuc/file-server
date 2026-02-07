@@ -9,6 +9,8 @@ import node from "@astrojs/node";
 export default defineConfig({
   integrations: [db()],
 
+  base: process.env.ASTRO_BASE || "/",
+
   adapter: node({
     mode: "middleware",
   }),
