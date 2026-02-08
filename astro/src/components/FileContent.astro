@@ -14,7 +14,6 @@ interface Props {
 
 const { file, fileType } = Astro.props;
 const extension = getExtension(file.name);
-const base = import.meta.env.BASE_URL;
 
 let fileContent = "";
 if (fileType === "text") {
@@ -26,7 +25,7 @@ if (fileType === "text") {
   {
     fileType === "image" && (
       <img
-        src={`${base}/f/${file.id}?enc=${encodeURIComponent(file.password)}`}
+        src={`./f/${file.id}?enc=${encodeURIComponent(file.password)}`}
         alt={file.name}
       />
     )
@@ -35,7 +34,7 @@ if (fileType === "text") {
     fileType === "audio" && (
       <audio controls>
         <source
-          src={`${base}/f/${file.id}?enc=${encodeURIComponent(file.password)}`}
+          src={`./f/${file.id}?enc=${encodeURIComponent(file.password)}`}
         />
         Your browser does not support the audio element.
       </audio>
@@ -45,7 +44,7 @@ if (fileType === "text") {
     fileType === "video" && (
       <video controls>
         <source
-          src={`${base}/f/${file.id}?enc=${encodeURIComponent(file.password)}`}
+          src={`./f/${file.id}?enc=${encodeURIComponent(file.password)}`}
         />
         Your browser does not support the video element.
       </video>
