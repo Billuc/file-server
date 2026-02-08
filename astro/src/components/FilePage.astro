@@ -15,6 +15,7 @@ const { file } = Astro.props;
 
 const hasNoPassword = await nullPassword(file.password);
 const fileType = getFileType(file.name);
+const base = import.meta.env.BASE_URL;
 ---
 
 <section class="file-header">
@@ -37,7 +38,7 @@ const fileType = getFileType(file.name);
       )
     }
     <a
-      href={`/f/${file.id}?download=true&enc=${encodeURIComponent(
+      href={`${base}/f/${file.id}?download=true&enc=${encodeURIComponent(
         file.password,
       )}`}
       class="file-button"

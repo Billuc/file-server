@@ -5,11 +5,12 @@ import Layout from "@/layouts/Layout.astro";
 import { InternalError } from "@/utils/InternalError";
 
 const error = Astro.props.error as InternalError;
+const base = import.meta.env.BASE_URL;
 ---
 
 <Layout title={`${error.code} - ${error.message}`}>
   <h1>{error.code} - {error.message}</h1>
   <p>
-    Return to the <a href="/">homepage</a> ?
+    Return to the <a href={base}>homepage</a> ?
   </p>
 </Layout>

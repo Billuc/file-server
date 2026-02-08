@@ -39,7 +39,7 @@ await db.insert(files).values({
   createdAt: now,
 });
 
-return Astro.redirect(`/${key}`);
+return Astro.redirect(`${import.meta.env.BASE_URL}/${key}`);
 
 /**
  * Extracts file data from FormData entry value
