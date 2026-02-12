@@ -39,7 +39,7 @@ await db.insert(files).values({
   createdAt: now,
 });
 
-return Astro.redirect(`${import.meta.env.BASE_URL}/${key}`);
+return Astro.redirect(`./${key}`);
 
 /**
  * Extracts file data from FormData entry value
@@ -54,10 +54,7 @@ function extractFileFromFormData(formData: FormData): File {
     throw new InternalError(400, "No file or text provided");
   }
 
-  if (file instanceof File) {
-    if (file.size === 0) {
-      throw new InternalError(400, "Uploaded file is empty");
-    }
+  if (file instanceof File && file.size > 0) {
     console.debug("File upload detected:", file.name);
     return file;
   }
