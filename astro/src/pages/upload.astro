@@ -13,7 +13,7 @@ if (Astro.request.method !== "POST") {
 
 // Parse the form data
 const formData = await Astro.request.formData();
-const password = formData.get("password")?.toString() ?? "";
+const password = formData.get("password")?.toString() || "";
 const hashedPassword = await hashPassword(password);
 
 // Extract file data using our modular method
@@ -60,9 +60,9 @@ function extractFileFromFormData(formData: FormData): File {
   }
   if (typeof text === "string" && text.trim() !== "") {
     console.debug(
-      `Text input detected: '${filename ?? "notes.txt"}' '${text}'`,
+      `Text input detected: '${filename || "notes.txt"}' '${text}'`,
     );
-    return new File([text], filename ?? "notes.txt");
+    return new File([text], filename || "notes.txt");
   }
 
   throw new InternalError(400, "Invalid file or text input");
