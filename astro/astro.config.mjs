@@ -2,6 +2,7 @@
 import { defineConfig } from "astro/config";
 import db from "@astrojs/db";
 import node from "@astrojs/node";
+import deno from "@deno/astro-adapter";
 import { loadEnvFile } from "node:process";
 
 loadEnvFile();
@@ -13,7 +14,6 @@ export default defineConfig({
 
   base: process.env.ASTRO_BASE || "/",
 
-  adapter: node({
-    mode: "middleware",
-  }),
+  adapter: deno({ start: false }),
+  output: 'server'
 });

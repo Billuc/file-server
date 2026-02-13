@@ -1,32 +1,30 @@
-import express from "express";
-import { handler as ssrHandler } from "./dist/server/entry.mjs";
+import { handle as ssrHandle } from "./dist/server/entry.mjs";
 import { launchCleanup } from "./launchCleanup.mjs";
 import { loadEnvFile } from "node:process";
+import { serveDir } from "jsr:@std/http";
 
 loadEnvFile();
 launchCleanup();
 console.log("Cleanup service launched !");
 
-const base = process.env.ASTRO_BASE || "/";
-console.log("Using base", base);
-
-const app = express();
-
-app.use(function (req, res, next) {
+async function handler(req) {
     const uuid = crypto.randomUUID();
     console.log(uuid, "- RECV", req.method, req.url);
-    const timer = console.time(uuid);
+    const start = performance.now();
+        
+    let res = await serveDir(req, { fsRoot: "./dist/client", quiet: true })
+    if (!res.ok) {
+        res = await ssrHandle(req);
+    }
     
-    res.on("finish", () => {
-        console.log(uuid, "- SENT", res.statusCode, req.url);
-        console.timeEnd(uuid);
-    });
-    next();
-});
+    const duration = performance.now() - start;
+    console.log(uuid, "- SENT", res.status, req.url, "in", duration.toFixed(3), "ms");
+    
+    return res;
+}
 
-app.use(base, express.static("dist/client/"));
-app.use(ssrHandler);
-
+const base = process.env.ASTRO_BASE || "/";
 const port = process.env.ASTRO_PORT || 3000;
-app.listen(port);
+console.log("Starting server on port", port, "with base", base);
+Deno.serve({ port }, handler);
 console.log("Server started on port", port);

@@ -5,17 +5,17 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build --remote",
-    "preview": "astro preview",
+    "preview": "deno --allow-all ./main.mjs",
     "astro": "astro",
-    "start": "node ./main.mjs"
+    "start": "deno --allow-all ./main.mjs"
   },
   "dependencies": {
     "@astrojs/db": "^0.18.3",
     "@astrojs/node": "^9.5.2",
+    "@deno/astro-adapter": "^0.3.2",
     "@libsql/client": "^0.17.0",
     "astro": "^5.16.11",
-    "bcryptjs": "^3.0.3",
-    "express": "^5.2.1"
+    "bcryptjs": "^3.0.3"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.6",
