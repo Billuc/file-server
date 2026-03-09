@@ -3,4 +3,4 @@
 - [ ] Add small paragraph to help newcomers
 - [ ] Add small footer
 - [ ] Limit filesize
-- [ ] Retry 3 times to insert if key exists
+- [x] Retry 3 times to insert if key exists
