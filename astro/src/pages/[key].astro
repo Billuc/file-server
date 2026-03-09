@@ -10,7 +10,6 @@ import Layout from "@/layouts/Layout.astro";
 import FilePage from "@/components/FilePage.astro";
 import { t, TranslationKeys } from "@/utils/i18n";
 
-// Astro component script
 const fileId = Astro.params["key"];
 
 let file = fileId
@@ -18,13 +17,19 @@ let file = fileId
   : null;
 
 if (!file) {
-  throw new InternalError(404, "File Not Found");
+  throw new InternalError(
+    404,
+    t(TranslationKeys.NotFound, Astro.preferredLocale),
+  );
 }
 
 // Check if file has expired
 const now = new Date();
 if (file.expiresAt && now > file.expiresAt) {
-  throw new InternalError(410, "File has expired");
+  throw new InternalError(
+    410,
+    t(TranslationKeys.FileHasExpired, Astro.preferredLocale),
+  );
 }
 
 let passwordConfirmed = false;

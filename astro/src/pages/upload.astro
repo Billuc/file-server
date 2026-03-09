@@ -4,12 +4,16 @@ import { generateRandomKey } from "../utils/generateKey";
 import { saveFile } from "../utils/fileUtils";
 import { InternalError } from "@/utils/InternalError";
 import { hashPassword } from "../utils/passwordUtils";
+import { t, TranslationKeys } from "@/utils/i18n";
 
 export const prerender = false;
 const MAX_INSERT_ATTEMPTS = 3;
 
 if (Astro.request.method !== "POST") {
-  throw new InternalError(405, "Method Not Allowed");
+  throw new InternalError(
+    405,
+    t(TranslationKeys.MethodNotAllowed, Astro.preferredLocale),
+  );
 }
 
 // Parse the form data
@@ -45,12 +49,14 @@ while (insertAttempts < MAX_INSERT_ATTEMPTS) {
     await saveFile(key, extractedFile);
     return Astro.redirect(`./${key}`);
   }
-  
+
   insertAttempts++;
 }
 
-throw new InternalError(500, "Too many key conflicts ! Contact the administrator (luc.billaud.pro@gmail.com)")
-
+throw new InternalError(
+  500,
+  t(TranslationKeys.TooManyKeyConflicts, Astro.preferredLocale),
+);
 
 /**
  * Extracts file data from FormData entry value
@@ -62,7 +68,10 @@ function extractFileFromFormData(formData: FormData): File {
   const filename = formData.get("filename")?.toString();
 
   if (!file && !text) {
-    throw new InternalError(400, "No file or text provided");
+    throw new InternalError(
+      400,
+      t(TranslationKeys.NoFileOrTextProvided, Astro.preferredLocale),
+    );
   }
 
   if (file instanceof File && file.size > 0) {
@@ -76,6 +85,9 @@ function extractFileFromFormData(formData: FormData): File {
     return new File([text], filename || "notes.txt");
   }
 
-  throw new InternalError(400, "Invalid file or text input");
+  throw new InternalError(
+    400,
+    t(TranslationKeys.InvalidFileOrTextInput, Astro.preferredLocale),
+  );
 }
 ---

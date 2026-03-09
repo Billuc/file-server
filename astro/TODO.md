@@ -1,4 +1,4 @@
-- [ ] Translate the app
+- [x] Translate the app
 - [ ] Store uploaded file's ids in localStorage ?
 - [ ] Add small paragraph to help newcomers
 - [ ] Add small footer
