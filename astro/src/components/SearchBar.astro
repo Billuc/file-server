@@ -1,5 +1,5 @@
 ---
-
+import { t, TranslationKeys } from "@/utils/i18n";
 ---
 
 <form class="search-bar">
@@ -11,8 +11,11 @@
     required
     pattern="[a-z]+-[a-z]+-[a-z]+-[a-z]+"
     class="search-bar-input"
+    data-error={t(TranslationKeys.InvalidKeyFormat, Astro.preferredLocale)}
   />
-  <button type="submit" class="search-bar-button">Search</button>
+  <button type="submit" class="search-bar-button"
+    >{t(TranslationKeys.Search, Astro.preferredLocale)}</button
+  >
 </form>
 
 <script>
@@ -26,7 +29,7 @@
 
     // Validate the key format
     if (!keyPattern.test(key)) {
-      alert("Invalid key format. Please use the format: aaaa-bbb-ccccc-dddd");
+      alert(input.dataset.error || "Clé invalide");
     } else {
       // Redirect to the file page with the provided key
       window.location.href = `./${key}`;

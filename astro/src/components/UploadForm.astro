@@ -1,34 +1,57 @@
 ---
-
+import { t, TranslationKeys } from "@/utils/i18n";
 ---
 
 <div class="upload-section">
   <form action="./upload" method="POST" enctype="multipart/form-data">
     <div class="upload-options">
       <div class="file-input">
-        <h4>Select a file...</h4>
+        <h4>{t(TranslationKeys.SelectFile, Astro.preferredLocale)}...</h4>
         <input type="file" name="file" />
       </div>
 
       <div class="text-input">
-        <h4>...or enter some text:</h4>
-        <textarea name="text" placeholder="Enter your text here..." rows="6"
-        ></textarea>
+        <h4>...{t(TranslationKeys.EnterText, Astro.preferredLocale)}:</h4>
+        <textarea
+          name="text"
+          placeholder={t(
+            TranslationKeys.EnterTextPlaceholder,
+            Astro.preferredLocale,
+          )}
+          rows="6"></textarea>
 
         <label>
-          Filename:
-          <input type="text" name="filename" placeholder="e.g.: notes.txt" />
+          {t(TranslationKeys.Filename, Astro.preferredLocale)}:
+          <input
+            type="text"
+            name="filename"
+            placeholder={t(
+              TranslationKeys.FilenamePlaceholder,
+              Astro.preferredLocale,
+            )}
+          />
         </label>
       </div>
     </div>
 
     <div style="margin-bottom: 15px;">
       <label>
-        Password (optional):
-        <input type="password" name="password" placeholder="Enter password" />
+        {t(TranslationKeys.Password, Astro.preferredLocale)} ({
+          t(TranslationKeys.Optional, Astro.preferredLocale)
+        }):
+        <input
+          type="password"
+          name="password"
+          placeholder={t(
+            TranslationKeys.FilenamePlaceholder,
+            Astro.preferredLocale,
+          )}
+        />
       </label>
     </div>
 
-    <button type="submit" class="upload-button"> Upload </button>
+    <button type="submit" class="upload-button">
+      {t(TranslationKeys.Upload, Astro.preferredLocale)}
+    </button>
   </form>
 </div>

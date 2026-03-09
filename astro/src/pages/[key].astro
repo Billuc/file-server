@@ -8,6 +8,7 @@ import { InternalError } from "@/utils/InternalError";
 import { verifyPassword } from "../utils/passwordUtils";
 import Layout from "@/layouts/Layout.astro";
 import FilePage from "@/components/FilePage.astro";
+import { t, TranslationKeys } from "@/utils/i18n";
 
 // Astro component script
 const fileId = Astro.params["key"];
@@ -37,31 +38,44 @@ if (Astro.request.method === "POST") {
 
 const isPasswordValid = await verifyPassword(password, file.password);
 if (isPasswordValid) {
-  console.log("Password correct.");
+  console.log("Password is correct.");
   passwordConfirmed = true;
 }
 ---
 
-<Layout title={!passwordConfirmed ? "Password Required" : file.name}>
+<Layout
+  title={!passwordConfirmed
+    ? t(TranslationKeys.PasswordRequired, Astro.preferredLocale)
+    : file.name}
+>
   {
     passwordConfirmed ? (
       <FilePage file={file} />
     ) : (
       <form method="POST" class="password-form">
-        <h2>This file is password protected.</h2>
+        <h2>
+          {t(TranslationKeys.FileIsPasswordProtected, Astro.preferredLocale)}
+        </h2>
 
         {password !== "" && (
-          <div style="color: red;">Incorrect password. Please try again.</div>
+          <div style="color: red;">
+            {t(TranslationKeys.IncorrectPassword, Astro.preferredLocale)}
+          </div>
         )}
 
         <input
           type="password"
           name="password"
-          placeholder="Enter Password"
+          placeholder={t(
+            TranslationKeys.PasswordPlaceholder,
+            Astro.preferredLocale,
+          )}
           required
         />
 
-        <button type="submit">Submit</button>
+        <button type="submit">
+          {t(TranslationKeys.Unlock, Astro.preferredLocale)}
+        </button>
       </form>
     )
   }

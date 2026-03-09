@@ -1,6 +1,7 @@
 ---
 import SearchBar from "@/components/SearchBar.astro";
 import "../assets/styles.css";
+import { TranslationKeys, t } from "@/utils/i18n";
 
 const { title } = Astro.props;
 let base = import.meta.env.BASE_URL;
@@ -10,7 +11,7 @@ if (base.endsWith("/")) {
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="fr">
   <head>
     <base href={base + "/"} />
     <meta charset="UTF-8" />
@@ -21,7 +22,9 @@ if (base.endsWith("/")) {
   </head>
   <body>
     <header class="navbar">
-      <a href="./" class="navbar-title">File Server</a>
+      <a href="./" class="navbar-title"
+        >{t(TranslationKeys.AppName, Astro.preferredLocale)}</a
+      >
       <SearchBar />
     </header>
 

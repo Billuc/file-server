@@ -1,9 +1,9 @@
 import type { APIRoute } from "astro";
 import { db, files } from "astro:db";
 import { eq } from "astro:db";
-import { InternalError } from "@/utils/InternalError";
+import { InternalError } from "@/utils/InternalError.ts";
 import { promises as fs } from "fs";
-import { getFilePath, fileExists, getFileType } from "../../utils/fileUtils";
+import { getFilePath, fileExists, getFileType } from "../../utils/fileUtils.ts";
 
 export const prerender = false;
 

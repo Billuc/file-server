@@ -2,6 +2,7 @@
 import { getFileType } from "@/utils/fileUtils";
 import { nullPassword } from "@/utils/passwordUtils";
 import FileContent from "./FileContent.astro";
+import { t, TranslationKeys } from "@/utils/i18n";
 
 interface Props {
   file: {
@@ -22,7 +23,9 @@ const fileType = getFileType(file.name);
   <span>(<i style="user-select: all">{file.id}</i>)</span>
   {
     !hasNoPassword && (
-      <span class="password-protected">🔒 Password Protected</span>
+      <span class="password-protected">
+        🔒 {t(TranslationKeys.PasswordProtected, Astro.preferredLocale)}
+      </span>
     )
   }
 
@@ -31,8 +34,15 @@ const fileType = getFileType(file.name);
   <div class="file-buttons">
     {
       fileType === "text" && (
-        <button id="copy-button" class="file-button">
-          Copy
+        <button
+          id="copy-button"
+          class="file-button"
+          data-success={t(
+            TranslationKeys.ContentCopiedToClipboard,
+            Astro.preferredLocale,
+          )}
+        >
+          {t(TranslationKeys.Copy, Astro.preferredLocale)}
         </button>
       )
     }
@@ -42,9 +52,16 @@ const fileType = getFileType(file.name);
       )}`}
       class="file-button"
     >
-      Download
+      {t(TranslationKeys.Download, Astro.preferredLocale)}
     </a>
-    <button id="share-button" class="file-button">Share</button>
+    <button
+      id="share-button"
+      class="file-button"
+      data-success={t(
+        TranslationKeys.UrlCopiedToClipboard,
+        Astro.preferredLocale,
+      )}>{t(TranslationKeys.Share, Astro.preferredLocale)}</button
+    >
   </div>
 </section>
 
@@ -59,7 +76,7 @@ const fileType = getFileType(file.name);
     if (copyButton) {
       const copyContent = () => {
         navigator.clipboard.writeText(fileContent.textContent).then(() => {
-          alert("Content copied to clipboard!");
+          alert(copyButton.dataset.success || "Copié");
         });
       };
       copyButton.addEventListener("click", copyContent);
@@ -67,7 +84,7 @@ const fileType = getFileType(file.name);
 
     const shareContent = () => {
       navigator.clipboard.writeText(window.location.href).then(() => {
-        alert("URL copied to clipboard!");
+        alert(shareButton.dataset.success || "Copié");
       });
     };
 

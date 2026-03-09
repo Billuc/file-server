@@ -3,11 +3,14 @@ export const prerender = false;
 
 import Layout from "@/layouts/Layout.astro";
 import { generateRandomKey } from "@/utils/generateKey";
+import { t, TranslationKeys } from "@/utils/i18n";
 
 const key = generateRandomKey();
 ---
 
-<Layout title="Generated Key">
+<Layout title={t(TranslationKeys.KeyGeneration, Astro.preferredLocale)}>
   <span>{key}</span>
-  <button onclick="location.reload()">Generate New Key</button>
+  <button onclick="location.reload()"
+    >{t(TranslationKeys.NewKey, Astro.preferredLocale)}</button
+  >
 </Layout>

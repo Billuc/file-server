@@ -15,4 +15,9 @@ export default defineConfig({
 
   adapter: deno({ start: false }),
   output: "server",
+
+  i18n: {
+    locales: ["fr", "en"],
+    defaultLocale: "fr",
+  },
 });
