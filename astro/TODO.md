@@ -1,0 +1,6 @@
+- [ ] Translate the app
+- [ ] Store uploaded file's ids in localStorage ?
+- [ ] Add small paragraph to help newcomers
+- [ ] Add small footer
+- [ ] Limit filesize
+- [ ] Retry 3 times to insert if key exists

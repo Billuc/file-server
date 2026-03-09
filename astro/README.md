@@ -1,46 +1,5 @@
-# Astro Starter Kit: Basics
+# Filex
 
-```sh
-npm create astro@latest -- --template basics
-```
+This is a file server. Hovever, unlike other file servers, this one has a big advantage (at least in my point of view). I can share files between different devices without having to log into a cloud account or copying a cryptic link. Here, each file has a simple key consisting of 2 pairs of a noun and an adjective like 'sapin-triste-banane-diluee' (sad-pinetree-diluted-banana). Easier to remember than 'dX4hj2Pz' right ?
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
-
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-/
-├── public/
-│   └── favicon.svg
-├── src
-│   ├── assets
-│   │   └── astro.svg
-│   ├── components
-│   │   └── Welcome.astro
-│   ├── layouts
-│   │   └── Layout.astro
-│   └── pages
-│       └── index.astro
-└── package.json
-```
-
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+> **Warning:** Given the relatively small number of possible keys (2^9^4 = 2^36 = ~6.9 \* 10^10, for comparison there are 2^122 = ~5.3 \* 10^36 UUIDs v4), this is by no means secure ! Plus, I didn't put a lot of focus on security, so don't use it for transferring sensitive documents.
