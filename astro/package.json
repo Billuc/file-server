@@ -1,5 +1,5 @@
 {
-  "name": "astro",
+  "name": "filex",
   "type": "module",
   "version": "0.0.1",
   "scripts": {
@@ -11,7 +11,6 @@
   },
   "dependencies": {
     "@astrojs/db": "^0.18.3",
-    "@astrojs/node": "^9.5.2",
     "@deno/astro-adapter": "^0.3.2",
     "@libsql/client": "^0.17.0",
     "astro": "^5.16.11",

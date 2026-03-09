@@ -1,6 +1,5 @@
-import { promises as fs } from "fs";
 import path from "path";
-import { InternalError } from "./InternalError";
+import { InternalError } from "./InternalError.ts";
 
 export type FileType = "image" | "audio" | "video" | "binary" | "text";
 
@@ -49,7 +48,7 @@ const OTHER_BINARY_EXTENSIONS = [
  * Gets the file path for a given key and filename
  */
 export function getFilePath(key: string, filename: string): string {
-  const uploadsDir = path.join(process.cwd(), "uploads");
+  const uploadsDir = path.join(Deno.cwd(), "uploads");
   return path.join(uploadsDir, `${key}__${filename}`);
 }
 
@@ -64,28 +63,21 @@ export async function readTextFile(
   const filePath = getFilePath(key, filename);
 
   try {
-    const fileHandle = await fs.open(filePath, "r");
+    const fileHandle = await Deno.open(filePath, { read: true });
     const stats = await fileHandle.stat();
+    const buffer = new Uint8Array(MAX_FILE_PREVIEW_SIZE); // 2 MB buffer
+    await fileHandle.read(buffer);
+    fileHandle.close();
+    const data = new TextDecoder().decode(buffer);
 
     if (stats.size > MAX_FILE_PREVIEW_SIZE) {
-      let buffer = Buffer.alloc(MAX_FILE_PREVIEW_SIZE); // 2 MB buffer
-      let offset = buffer.write(
-        "File too large, showing first 2MB only... Download to get the full file !\n\n",
-        "utf8",
+      return (
+        "File too large, showing first 2MB only... Download to get the full file !\n\n" +
+        data
       );
-      const result = await fileHandle.read(
-        buffer,
-        offset,
-        buffer.length - offset,
-        0,
-      );
-      await fileHandle.close();
-      return result.buffer.toString("utf8");
     }
 
-    const content = await fileHandle.readFile("utf-8");
-    await fileHandle.close();
-    return content;
+    return data;
   } catch (error) {
     console.error(`Failed to read file from filesystem: ${filePath}`, error);
     throw new InternalError(
@@ -105,8 +97,8 @@ export async function fileExists(
   const filePath = getFilePath(key, filename);
 
   try {
-    await fs.access(filePath);
-    return true;
+    const fileinfo = await Deno.stat(filePath);
+    return fileinfo.isFile;
   } catch {
     return false;
   }
@@ -119,7 +111,7 @@ export async function deleteFile(key: string, filename: string): Promise<void> {
   const filePath = getFilePath(key, filename);
 
   try {
-    await fs.unlink(filePath);
+    await Deno.remove(filePath);
     console.log(`File deleted from filesystem: ${filePath}`);
   } catch (error) {
     console.error(`Failed to delete file from filesystem: ${filePath}`, error);
@@ -134,11 +126,11 @@ export async function saveFile(key: string, file: File): Promise<void> {
   const filePath = getFilePath(key, file.name);
 
   try {
-    const uploadsDir = path.join(process.cwd(), "uploads");
-    await fs.mkdir(uploadsDir, { recursive: true });
+    const uploadsDir = path.join(Deno.cwd(), "uploads");
+    await Deno.mkdir(uploadsDir, { recursive: true });
 
     const fileStream = file.stream();
-    await fs.writeFile(filePath, fileStream);
+    await Deno.writeFile(filePath, fileStream);
   } catch (error) {
     console.error(`Failed to save file to filesystem: ${filePath}`, error);
     throw new InternalError(
