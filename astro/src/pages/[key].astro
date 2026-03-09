@@ -42,7 +42,7 @@ if (isPasswordValid) {
 }
 ---
 
-<Layout title={file.password ? "Password Required" : file.name}>
+<Layout title={!passwordConfirmed ? "Password Required" : file.name}>
   {
     passwordConfirmed ? (
       <FilePage file={file} />
