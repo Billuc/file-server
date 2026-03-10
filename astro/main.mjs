@@ -39,5 +39,5 @@ async function handler(req) {
   return res;
 }
 
-Deno.serve({ port, hostname: "0.0.0.0" }, handler);
+Deno.serve({ port }, handler);
 console.log("Server started on port", port);

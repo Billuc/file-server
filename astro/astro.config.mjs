@@ -20,4 +20,9 @@ export default defineConfig({
     locales: ["fr", "en"],
     defaultLocale: "fr",
   },
+
+  security: {
+  	// Deactivated checkOrigin because Cloudflare Tunneling changes url from https to http
+  	checkOrigin: false,
+  }
 });
