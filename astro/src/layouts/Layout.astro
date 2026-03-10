@@ -15,7 +15,7 @@ if (base.endsWith("/")) {
   <head>
     <base href={base + "/"} />
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" type="image/x-icon" href={`./favicon.ico`} />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
@@ -25,7 +25,9 @@ if (base.endsWith("/")) {
       <a href="./" class="navbar-title"
         >{t(TranslationKeys.AppName, Astro.preferredLocale)}</a
       >
-      <SearchBar />
+      <div id="header-search-bar">
+        <SearchBar />
+      </div>
     </header>
 
     <main>

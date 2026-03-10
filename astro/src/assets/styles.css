@@ -324,3 +324,9 @@ header .search-bar {
 .search-bar button:hover {
   background-color: color-mix(in oklab, var(--primary) 80%, transparent 20%);
 }
+
+@media screen and (max-width: 500px) {
+  #header-search-bar {
+    display: none;
+  }
+}
