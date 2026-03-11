@@ -3,6 +3,7 @@ import SearchBar from "@/components/SearchBar.astro";
 import Layout from "@/layouts/Layout.astro";
 import UploadForm from "@/components/UploadForm.astro";
 import { t, TranslationKeys } from "@/utils/i18n";
+import YourFiles from "@/components/YourFiles.astro";
 ---
 
 <Layout title={t(TranslationKeys.AppName, Astro.preferredLocale)}>
@@ -16,4 +17,5 @@ import { t, TranslationKeys } from "@/utils/i18n";
   </p>
   <SearchBar />
   <UploadForm />
+  <YourFiles />
 </Layout>

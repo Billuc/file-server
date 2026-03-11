@@ -1,5 +1,5 @@
 - [x] Translate the app
-- [ ] Store uploaded file's ids in localStorage ?
+- [x] Store uploaded file's ids in localStorage ?
 - [x] Add small paragraph to help newcomers
 - [x] Add small footer
 - [x] Limit filesize

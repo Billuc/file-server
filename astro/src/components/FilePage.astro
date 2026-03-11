@@ -20,7 +20,7 @@ const fileType = getFileType(file.name);
 
 <section class="file-header">
   <h2>{file.name}</h2>
-  <span>(<i style="user-select: all">{file.id}</i>)</span>
+  <span>(<i style="user-select: all" id="file-id">{file.id}</i>)</span>
   {
     !hasNoPassword && (
       <span class="password-protected">

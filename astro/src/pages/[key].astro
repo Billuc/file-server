@@ -86,3 +86,13 @@ if (isPasswordValid) {
     )
   }
 </Layout>
+
+<script>
+  import { addFile } from "@/utils/clientStorage";
+
+  const fileIdEl = document.getElementById("file-id");
+  if (fileIdEl) {
+    const fileId = fileIdEl.textContent;
+    addFile(fileId);
+  }
+</script>

@@ -17,32 +17,31 @@ export function launchCleanup() {
   }
 
   const client = createClient({ url: dbPath });
+  cleanup(client);
+  setInterval(() => cleanup(client), 60 * 60 * 1000); // Run every hour
+}
 
-  setInterval(
-    async () => {
-      const notExpiredFiles = await client.execute(SELECT_QUERY);
+async function cleanup(client) {
+  const notExpiredFiles = await client.execute(SELECT_QUERY);
 
-      try {
-        const files = await readdir(UPLOAD_PATH);
+  try {
+    const files = await readdir(UPLOAD_PATH);
 
-        for (const file of files) {
-          const isNotExpired = notExpiredFiles.rows.find((row) => {
-            const id = row[0];
-            const name = row[1];
-            return file === `${id}__${name}`;
-          });
+    for (const file of files) {
+      const isNotExpired = notExpiredFiles.rows.find((row) => {
+        const id = row[0];
+        const name = row[1];
+        return file === `${id}__${name}`;
+      });
 
-          if (!isNotExpired) {
-            console.log(`Deleting expired file: ${file}`);
-            await rm(`./uploads/${file}`);
-          }
-        }
-      } catch (err) {
-        console.error("Could not read upload directory", err);
+      if (!isNotExpired) {
+        console.log(`Deleting expired file: ${file}`);
+        await rm(`./uploads/${file}`);
       }
+    }
+  } catch (err) {
+    console.error("Could not read upload directory", err);
+  }
 
-      await client.execute(DELETE_QUERY);
-    },
-    60 * 60 * 1000,
-  ); // Run every hour
+  await client.execute(DELETE_QUERY);
 }

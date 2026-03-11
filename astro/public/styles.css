@@ -342,3 +342,11 @@ footer {
   font-size: small;
   margin-block: 0.5rem;
 }
+
+.remove-link {
+  margin-left: 0.5rem;
+  background-color: red;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+}
