@@ -24,6 +24,17 @@ const hashedPassword = await hashPassword(password);
 // Extract file data using our modular method
 const extractedFile = extractFileFromFormData(formData);
 
+if (extractedFile.size > 10 * 1024 * 1024) {
+  // Reject files larger than 10MB
+  throw new InternalError(
+    413,
+    t(TranslationKeys.FileIsTooLarge, Astro.preferredLocale).replace(
+      "XXX",
+      extractedFile.name,
+    ),
+  );
+}
+
 let insertAttempts = 0;
 
 while (insertAttempts < MAX_INSERT_ATTEMPTS) {

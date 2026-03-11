@@ -7,7 +7,14 @@ import { t, TranslationKeys } from "@/utils/i18n";
     <div class="upload-options">
       <div class="file-input">
         <h4>{t(TranslationKeys.SelectFile, Astro.preferredLocale)}...</h4>
-        <input type="file" name="file" />
+        <input
+          type="file"
+          name="file"
+          data-errormessage={t(
+            TranslationKeys.FileIsTooLarge,
+            Astro.preferredLocale,
+          )}
+        />
       </div>
 
       <div class="text-input">
@@ -55,3 +62,26 @@ import { t, TranslationKeys } from "@/utils/i18n";
     </button>
   </form>
 </div>
+
+<script>
+  const fileInput: HTMLInputElement | null =
+    document.querySelector(".file-input input");
+
+  fileInput?.addEventListener("change", () => {
+    fileInput.setCustomValidity("");
+    const files = fileInput.files;
+    if (!files) return;
+    for (const file of files) {
+      if (file.size > 10 * 1024 * 1024) {
+        const errorMessage =
+          fileInput.dataset.errormessage ??
+          "Le fichier XXX est trop volumineux.";
+        fileInput.setCustomValidity(
+          errorMessage.replace("XXX", file.name) + " (>10MB)",
+        );
+        fileInput.reportValidity();
+        return;
+      }
+    }
+  });
+</script>

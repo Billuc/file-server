@@ -17,6 +17,7 @@ export enum TranslationKeys {
   EnterTextPlaceholder,
   FileHasExpired,
   FileIsPasswordProtected,
+  FileIsTooLarge,
   Filename,
   FilenamePlaceholder,
   HomePage,
@@ -67,6 +68,7 @@ const TRANSLATIONS: { [l in Lang]: { [k in TranslationKeys]: string } } = {
     [TranslationKeys.FileHasExpired]: "File has expired",
     [TranslationKeys.FileIsPasswordProtected]:
       "This file is password protected.",
+    [TranslationKeys.FileIsTooLarge]: "File XXX is too large",
     [TranslationKeys.Filename]: "Filename",
     [TranslationKeys.FilenamePlaceholder]: "e.g.: notes.txt",
     [TranslationKeys.HomePage]: "homepage",
@@ -122,6 +124,7 @@ const TRANSLATIONS: { [l in Lang]: { [k in TranslationKeys]: string } } = {
     [TranslationKeys.FileHasExpired]: "Le fichier a expiré",
     [TranslationKeys.FileIsPasswordProtected]:
       "Ce fichier est protégé par un mot de passe.",
+    [TranslationKeys.FileIsTooLarge]: "Le fichier XXX est trop volumineux.",
     [TranslationKeys.Filename]: "Nom du fichier",
     [TranslationKeys.FilenamePlaceholder]: "par ex.: notes.txt",
     [TranslationKeys.HomePage]: "page d'accueil",
