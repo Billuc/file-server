@@ -11,6 +11,9 @@ import { t, TranslationKeys } from "@/utils/i18n";
       t(TranslationKeys.AppDescription, Astro.preferredLocale)
     }
   </h1>
+  <p class="home-message">
+    {t(TranslationKeys.HomepageMessage, Astro.preferredLocale)}
+  </p>
   <SearchBar />
   <UploadForm />
 </Layout>

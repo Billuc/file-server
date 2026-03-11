@@ -11,6 +11,7 @@ export enum TranslationKeys {
   CannotDisplayBinary,
   ContentCopiedToClipboard,
   Copy,
+  DevelopedBy,
   Download,
   EnterText,
   EnterTextPlaceholder,
@@ -19,6 +20,7 @@ export enum TranslationKeys {
   Filename,
   FilenamePlaceholder,
   HomePage,
+  HomepageMessage,
   IncorrectPassword,
   InternalServerError,
   InvalidFileOrTextInput,
@@ -44,6 +46,7 @@ export enum TranslationKeys {
   Unlock,
   Upload,
   UrlCopiedToClipboard,
+  Using,
   VideoNotSupported,
 }
 
@@ -57,6 +60,7 @@ const TRANSLATIONS: { [l in Lang]: { [k in TranslationKeys]: string } } = {
       "Binary file. Cannot display content.",
     [TranslationKeys.ContentCopiedToClipboard]: "Content copied to clipboard !",
     [TranslationKeys.Copy]: "Copy",
+    [TranslationKeys.DevelopedBy]: "Developed by",
     [TranslationKeys.Download]: "Download",
     [TranslationKeys.EnterText]: "or enter some text",
     [TranslationKeys.EnterTextPlaceholder]: "Enter your text here...",
@@ -66,6 +70,8 @@ const TRANSLATIONS: { [l in Lang]: { [k in TranslationKeys]: string } } = {
     [TranslationKeys.Filename]: "Filename",
     [TranslationKeys.FilenamePlaceholder]: "e.g.: notes.txt",
     [TranslationKeys.HomePage]: "homepage",
+    [TranslationKeys.HomepageMessage]:
+      "Partag'Express is a simple file server. Upload your file and share it across devices or with friends using a very simple and easy-to-remember key. Be careful though, your files will expire after 7 days !",
     [TranslationKeys.IncorrectPassword]:
       "Incorrect password. Please try again.",
     [TranslationKeys.InternalServerError]: "Internal Server Error",
@@ -95,6 +101,7 @@ const TRANSLATIONS: { [l in Lang]: { [k in TranslationKeys]: string } } = {
     [TranslationKeys.Unlock]: "Unlock",
     [TranslationKeys.Upload]: "Upload",
     [TranslationKeys.UrlCopiedToClipboard]: "URL copied to clipboard",
+    [TranslationKeys.Using]: "using",
     [TranslationKeys.VideoNotSupported]:
       "Your browser does not support video elements.",
   },
@@ -108,6 +115,7 @@ const TRANSLATIONS: { [l in Lang]: { [k in TranslationKeys]: string } } = {
     [TranslationKeys.ContentCopiedToClipboard]:
       "Contenu copié dans le presse-papier !",
     [TranslationKeys.Copy]: "Copier",
+    [TranslationKeys.DevelopedBy]: "Développé par",
     [TranslationKeys.Download]: "Télécharger",
     [TranslationKeys.EnterText]: "ou entrez du texte",
     [TranslationKeys.EnterTextPlaceholder]: "Entrez votre texte ici...",
@@ -117,6 +125,8 @@ const TRANSLATIONS: { [l in Lang]: { [k in TranslationKeys]: string } } = {
     [TranslationKeys.Filename]: "Nom du fichier",
     [TranslationKeys.FilenamePlaceholder]: "par ex.: notes.txt",
     [TranslationKeys.HomePage]: "page d'accueil",
+    [TranslationKeys.HomepageMessage]:
+      "Partag'Express est un serveur de fichier facile à utiliser. Envoie ton fichier et partage-le entre tes appareils ou avec tes amis facilement grâce à une clé facile à retenir. Attention: les fichiers expirent au bout de 7 jours !",
     [TranslationKeys.IncorrectPassword]:
       "Mot de passe incorrect. Veuillez réessayer !",
     [TranslationKeys.InternalServerError]: "Erreur interne au serveur",
@@ -148,6 +158,7 @@ const TRANSLATIONS: { [l in Lang]: { [k in TranslationKeys]: string } } = {
     [TranslationKeys.Upload]: "Envoyer",
     [TranslationKeys.UrlCopiedToClipboard]:
       "URL copiée dans le presse-papier !",
+    [TranslationKeys.Using]: "avec",
     [TranslationKeys.VideoNotSupported]:
       "Votre navigateur ne peut pas lire les fichiers video.",
   },

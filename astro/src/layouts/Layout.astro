@@ -33,5 +33,12 @@ if (base.endsWith("/")) {
     <main>
       <slot />
     </main>
+
+    <footer>
+      {t(TranslationKeys.DevelopedBy, Astro.preferredLocale)}
+      <a href="https://billuc.github.io">Luc Billaud</a>
+      {t(TranslationKeys.Using, Astro.preferredLocale)}
+      Astro, Deno & SQLite
+    </footer>
   </body>
 </html>

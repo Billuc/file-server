@@ -18,13 +18,18 @@ body {
 main {
   text-align: center;
   margin-inline: auto;
-  padding: 2rem;
+  padding: 1rem 2rem;
 }
 
 /* Home page styles */
 .home-title {
-  font-size: 2.5rem;
+  font-size: 2rem;
   margin-bottom: 2rem;
+}
+
+.home-message {
+  max-width: max(700px, 50vh);
+  margin: 1.5rem auto;
 }
 
 .home-form {
@@ -329,4 +334,11 @@ header .search-bar {
   #header-search-bar {
     display: none;
   }
+}
+
+footer {
+  text-align: center;
+  color: rgba(0, 0, 0, 0.7);
+  font-size: small;
+  margin-block: 0.5rem;
 }
