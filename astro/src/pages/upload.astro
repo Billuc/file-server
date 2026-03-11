@@ -47,7 +47,7 @@ while (insertAttempts < MAX_INSERT_ATTEMPTS) {
   if (res.rowsAffected === 1) {
     // Save to filesystem
     await saveFile(key, extractedFile);
-    return Astro.redirect(`./${key}`);
+    return Astro.redirect(`./${encodeURIComponent(key)}`);
   }
 
   insertAttempts++;

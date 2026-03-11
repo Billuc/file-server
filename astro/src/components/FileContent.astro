@@ -26,7 +26,7 @@ if (fileType === "text") {
   {
     fileType === "image" && (
       <img
-        src={`./f/${file.id}?enc=${encodeURIComponent(file.password)}`}
+        src={`./f/${encodeURIComponent(file.id)}?enc=${encodeURIComponent(file.password)}`}
         alt={file.name}
       />
     )
@@ -35,7 +35,7 @@ if (fileType === "text") {
     fileType === "audio" && (
       <audio controls>
         <source
-          src={`./f/${file.id}?enc=${encodeURIComponent(file.password)}`}
+          src={`./f/${encodeURIComponent(file.id)}?enc=${encodeURIComponent(file.password)}`}
         />
         {t(TranslationKeys.AudioNotSupported, Astro.preferredLocale)}
       </audio>
@@ -45,7 +45,7 @@ if (fileType === "text") {
     fileType === "video" && (
       <video controls>
         <source
-          src={`./f/${file.id}?enc=${encodeURIComponent(file.password)}`}
+          src={`./f/${encodeURIComponent(file.id)}?enc=${encodeURIComponent(file.password)}`}
         />
         {t(TranslationKeys.VideoNotSupported, Astro.preferredLocale)}
       </video>

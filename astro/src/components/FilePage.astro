@@ -47,7 +47,7 @@ const fileType = getFileType(file.name);
       )
     }
     <a
-      href={`./f/${file.id}?download=true&enc=${encodeURIComponent(
+      href={`./f/${encodeURIComponent(file.id)}?download=true&enc=${encodeURIComponent(
         file.password,
       )}`}
       class="file-button"

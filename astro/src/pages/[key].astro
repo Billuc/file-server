@@ -9,8 +9,9 @@ import { verifyPassword } from "../utils/passwordUtils";
 import Layout from "@/layouts/Layout.astro";
 import FilePage from "@/components/FilePage.astro";
 import { t, TranslationKeys } from "@/utils/i18n";
+import normalizeKey from "@/utils/normalizeKey";
 
-const fileId = Astro.params["key"];
+const fileId = normalizeKey(Astro.params["key"]);
 
 let file = fileId
   ? await db.select().from(files).where(eq(files.id, fileId)).get()

@@ -5,12 +5,13 @@ import { InternalError } from "@/utils/InternalError.ts";
 import { promises as fs } from "fs";
 import { getFilePath, fileExists, getFileType } from "../../utils/fileUtils.ts";
 import { t, TranslationKeys } from "@/utils/i18n.ts";
+import normalizeKey from "../../utils/normalizeKey.ts";
 
 export const prerender = false;
 
 export const GET: APIRoute = async ({ params, url, preferredLocale }) => {
   try {
-    const key = params.key;
+    const key = normalizeKey(params.key);
     const enc = url.searchParams.get("enc");
     const download = url.searchParams.get("download") === "true";
 

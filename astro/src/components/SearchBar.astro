@@ -9,7 +9,6 @@ import { t, TranslationKeys } from "@/utils/i18n";
     type="text"
     placeholder="e.g., a-b-c-d"
     required
-    pattern="[a-z]+-[a-z]+-[a-z]+-[a-z]+"
     class="search-bar-input"
     data-error={t(TranslationKeys.InvalidKeyFormat, Astro.preferredLocale)}
   />
@@ -19,21 +18,14 @@ import { t, TranslationKeys } from "@/utils/i18n";
 </form>
 
 <script>
-  const keyPattern = /^[a-z]+-[a-z]+-[a-z]+-[a-z]+$/;
-
   function onFileSearch(event: Event) {
     event.preventDefault();
     const form = event.target as HTMLFormElement;
     const input = form.elements.namedItem("key") as HTMLInputElement;
     const key = input.value.trim();
 
-    // Validate the key format
-    if (!keyPattern.test(key)) {
-      alert(input.dataset.error || "Clé invalide");
-    } else {
-      // Redirect to the file page with the provided key
-      window.location.href = `./${key}`;
-    }
+    // Redirect to the file page with the provided key
+    window.location.href = `./${encodeURIComponent(key)}`;
   }
 
   document

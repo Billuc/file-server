@@ -4,4 +4,4 @@
 - [x] Add small footer
 - [ ] Limit filesize
 - [x] Retry 3 times to insert if key exists
-- [ ] Normalize entered keys (remove accents, replace spaces with dashes)
+- [x] Normalize entered keys (remove accents, replace spaces with dashes)
