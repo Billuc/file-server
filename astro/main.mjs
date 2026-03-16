@@ -1,43 +1,62 @@
 import { handle as ssrHandle } from "./dist/server/entry.mjs";
 import { launchCleanup } from "./launchCleanup.mjs";
-import { loadEnvFile, env } from "node:process"; // Using Node env for Astro
-import { serveDir } from "jsr:@std/http";
+import path from "node:path";
 
-loadEnvFile();
 launchCleanup();
 console.log("Cleanup service launched !");
 
-const base = env.ASTRO_BASE || "/";
-const port = parseInt(env.ASTRO_PORT || "3000");
+const base = Bun.env.ASTRO_BASE || "/";
+const port = parseInt(Bun.env.ASTRO_PORT || "3000");
 console.log("Starting server on port", port, "with base", base);
 
-async function handler(req) {
-  const uuid = crypto.randomUUID();
-  console.log(uuid, "- RECV", req.method, req.url);
-  const start = performance.now();
-
-  let res = await serveDir(req, {
-    fsRoot: "./dist/client",
-    quiet: true,
-    urlRoot: base.slice(1), // Remove leading slash
-  });
-  if (!res.ok) {
-    res = await ssrHandle(req);
+function removeBase(pathname) {
+  if (pathname.startsWith(base)) {
+    return pathname.slice(base.length);
   }
-
-  const duration = performance.now() - start;
-  console.log(
-    uuid,
-    "- SENT",
-    res.status,
-    req.url,
-    "in",
-    duration.toFixed(3),
-    "ms",
-  );
-
-  return res;
+  return pathname;
 }
 
-Deno.serve({ port }, handler);
-console.log("Server started on port", port);
+function logMiddleware(handler) {
+  return async function (req, server) {
+    const uuid = crypto.randomUUID();
+    console.log(uuid, "- RECV", req.method, req.url);
+    const start = performance.now();
+
+    const res = await handler(req, server);
+
+    const duration = performance.now() - start;
+    console.log(
+      uuid,
+      "- SENT",
+      res.status,
+      req.url,
+      "in",
+      duration.toFixed(3),
+      "ms",
+    );
+
+    return res;
+  };
+}
+
+/**
+ * @param {import("bun").BunRequest} req
+ */
+async function handler(req, server) {
+  const url = new URL(req.url);
+
+  try {
+    const filePath = path.join("./dist/client", removeBase(url.pathname));
+    const file = Bun.file(filePath);
+    return new Response(await file.text(), {
+      headers: {
+        "Content-Type": file.type,
+      },
+    });
+  } catch (err) {
+    const res = await ssrHandle(req, server);
+    return res;
+  }
+}
+
+Bun.serve({ port, fetch: logMiddleware(handler) });

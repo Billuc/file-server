@@ -1,19 +1,17 @@
 // @ts-check
 import { defineConfig } from "astro/config";
 import db from "@astrojs/db";
-import deno from "@deno/astro-adapter";
-import { loadEnvFile, env } from "node:process"; // Using Node env for Astro
+import bun from "@nurodev/astro-bun";
 
-loadEnvFile();
-console.log("base is", env.ASTRO_BASE);
+console.log("base is", Bun.env.ASTRO_BASE);
 
 // https://astro.build/config
 export default defineConfig({
   integrations: [db()],
 
-  base: env.ASTRO_BASE || "/",
+  base: Bun.env.ASTRO_BASE || "/",
 
-  adapter: deno({ start: false }),
+  adapter: bun({ port: Bun.env.ASTRO_PORT }),
   output: "server",
 
   i18n: {
@@ -22,7 +20,7 @@ export default defineConfig({
   },
 
   security: {
-  	// Deactivated checkOrigin because Cloudflare Tunneling changes url from https to http
-  	checkOrigin: false,
-  }
+    // Deactivated checkOrigin because Cloudflare Tunneling changes url from https to http
+    checkOrigin: false,
+  },
 });
