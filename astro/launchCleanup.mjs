@@ -15,7 +15,7 @@ export function launchCleanup() {
     filename: dbPath,
   });
   console.log("Launching cleanup...");
-  cleanup(client);
+  // cleanup(client);
   setInterval(() => cleanup(client), 60 * 60 * 1000); // Run every hour
 }
 

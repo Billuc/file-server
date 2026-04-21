@@ -3,10 +3,10 @@
   "type": "module",
   "version": "0.0.1",
   "scripts": {
-    "dev": "bunx --bun astro dev",
-    "build": "bunx --bun astro build --remote",
+    "dev": "bun x --bun astro dev",
+    "build": "bun x --bun astro build --remote",
     "preview": "bun run --bun start",
-    "astro": "bunx --bun astro",
+    "astro": "bun x --bun astro",
     "start": "bun run main.mjs"
   },
   "dependencies": {
