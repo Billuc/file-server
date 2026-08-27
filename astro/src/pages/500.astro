@@ -3,6 +3,7 @@ export const prerender = false;
 
 import Layout from "@/layouts/Layout.astro";
 import { InternalError } from "@/utils/InternalError";
+import { t, TranslationKeys } from "@/utils/i18n";
 
 const error = Astro.props.error as InternalError;
 ---
@@ -10,6 +11,7 @@ const error = Astro.props.error as InternalError;
 <Layout title={`${error.code} - ${error.message}`}>
   <h1>{error.code} - {error.message}</h1>
   <p>
-    Return to the <a href="./">homepage</a> ?
+    {t(TranslationKeys.ReturnTo, Astro.preferredLocale)}
+    <a href="./">{t(TranslationKeys.HomePage, Astro.preferredLocale)}</a> ?
   </p>
 </Layout>

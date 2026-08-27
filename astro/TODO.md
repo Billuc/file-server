@@ -1,6 +1,7 @@
-- [ ] Translate the app
-- [ ] Store uploaded file's ids in localStorage ?
-- [ ] Add small paragraph to help newcomers
-- [ ] Add small footer
-- [ ] Limit filesize
-- [ ] Retry 3 times to insert if key exists
+- [x] Translate the app
+- [x] Store uploaded file's ids in localStorage ?
+- [x] Add small paragraph to help newcomers
+- [x] Add small footer
+- [x] Limit filesize
+- [x] Retry 3 times to insert if key exists
+- [x] Normalize entered keys (remove accents, replace spaces with dashes)

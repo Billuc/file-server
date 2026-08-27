@@ -1,32 +1,62 @@
-import express from "express";
-import { handler as ssrHandler } from "./dist/server/entry.mjs";
+import { handle as ssrHandle } from "./dist/server/entry.mjs";
 import { launchCleanup } from "./launchCleanup.mjs";
-import { loadEnvFile } from "node:process";
+import path from "node:path";
 
-loadEnvFile();
 launchCleanup();
 console.log("Cleanup service launched !");
 
-const base = process.env.ASTRO_BASE || "/";
-console.log("Using base", base);
+const base = Bun.env.ASTRO_BASE || "/";
+const port = parseInt(Bun.env.ASTRO_PORT || "3000");
+console.log("Starting server on port", port, "with base", base);
 
-const app = express();
+function removeBase(pathname) {
+  if (pathname.startsWith(base)) {
+    return pathname.slice(base.length);
+  }
+  return pathname;
+}
 
-app.use(function (req, res, next) {
+function logMiddleware(handler) {
+  return async function (req, server) {
     const uuid = crypto.randomUUID();
     console.log(uuid, "- RECV", req.method, req.url);
-    const timer = console.time(uuid);
-    
-    res.on("finish", () => {
-        console.log(uuid, "- SENT", res.statusCode, req.url);
-        console.timeEnd(uuid);
+    const start = performance.now();
+
+    const res = await handler(req, server);
+
+    const duration = performance.now() - start;
+    console.log(
+      uuid,
+      "- SENT",
+      res.status,
+      req.url,
+      "in",
+      duration.toFixed(3),
+      "ms",
+    );
+
+    return res;
+  };
+}
+
+/**
+ * @param {import("bun").BunRequest} req
+ */
+async function handler(req, server) {
+  const url = new URL(req.url);
+
+  try {
+    const filePath = path.join("./dist/client", removeBase(url.pathname));
+    const file = Bun.file(filePath);
+    return new Response(await file.text(), {
+      headers: {
+        "Content-Type": file.type,
+      },
     });
-    next();
-});
+  } catch (err) {
+    const res = await ssrHandle(req, server);
+    return res;
+  }
+}
 
-app.use(base, express.static("dist/client/"));
-app.use(ssrHandler);
-
-const port = process.env.ASTRO_PORT || 3000;
-app.listen(port);
-console.log("Server started on port", port);
+Bun.serve({ port, fetch: logMiddleware(handler) });

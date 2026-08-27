@@ -4,11 +4,16 @@ import { generateRandomKey } from "../utils/generateKey";
 import { saveFile } from "../utils/fileUtils";
 import { InternalError } from "@/utils/InternalError";
 import { hashPassword } from "../utils/passwordUtils";
+import { t, TranslationKeys } from "@/utils/i18n";
 
 export const prerender = false;
+const MAX_INSERT_ATTEMPTS = 3;
 
 if (Astro.request.method !== "POST") {
-  throw new InternalError(405, "Method Not Allowed");
+  throw new InternalError(
+    405,
+    t(TranslationKeys.MethodNotAllowed, Astro.preferredLocale),
+  );
 }
 
 // Parse the form data
@@ -19,27 +24,50 @@ const hashedPassword = await hashPassword(password);
 // Extract file data using our modular method
 const extractedFile = extractFileFromFormData(formData);
 
-// Generate a unique key for the file
-const key = await generateRandomKey();
-console.log("Generated key for uploaded file:", key);
+if (extractedFile.size > 10 * 1024 * 1024) {
+  // Reject files larger than 10MB
+  throw new InternalError(
+    413,
+    t(TranslationKeys.FileIsTooLarge, Astro.preferredLocale).replace(
+      "XXX",
+      extractedFile.name,
+    ),
+  );
+}
 
-// Calculate expiration date (7 days from now)
-const now = new Date();
-const expiresAt = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
+let insertAttempts = 0;
 
-// Save to filesystem
-await saveFile(key, extractedFile);
+while (insertAttempts < MAX_INSERT_ATTEMPTS) {
+  // Generate a unique key for the file
+  const key = await generateRandomKey();
+  console.log("Generated key for uploaded file:", key);
 
-// Store only file metadata in the database (no content)
-await db.insert(files).values({
-  id: key,
-  name: extractedFile.name,
-  password: hashedPassword, // Store hashed password
-  expiresAt: expiresAt,
-  createdAt: now,
-});
+  // Calculate expiration date (7 days from now)
+  const now = new Date();
+  const expiresAt = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
 
-return Astro.redirect(`./${key}`);
+  // Store only file metadata in the database (no content)
+  const res = await db.insert(files).values({
+    id: key,
+    name: extractedFile.name,
+    password: hashedPassword, // Store hashed password
+    expiresAt: expiresAt,
+    createdAt: now,
+  });
+
+  if (res.rowsAffected === 1) {
+    // Save to filesystem
+    await saveFile(key, extractedFile);
+    return Astro.redirect(`./${encodeURIComponent(key)}`);
+  }
+
+  insertAttempts++;
+}
+
+throw new InternalError(
+  500,
+  t(TranslationKeys.TooManyKeyConflicts, Astro.preferredLocale),
+);
 
 /**
  * Extracts file data from FormData entry value
@@ -51,7 +79,10 @@ function extractFileFromFormData(formData: FormData): File {
   const filename = formData.get("filename")?.toString();
 
   if (!file && !text) {
-    throw new InternalError(400, "No file or text provided");
+    throw new InternalError(
+      400,
+      t(TranslationKeys.NoFileOrTextProvided, Astro.preferredLocale),
+    );
   }
 
   if (file instanceof File && file.size > 0) {
@@ -65,6 +96,9 @@ function extractFileFromFormData(formData: FormData): File {
     return new File([text], filename || "notes.txt");
   }
 
-  throw new InternalError(400, "Invalid file or text input");
+  throw new InternalError(
+    400,
+    t(TranslationKeys.InvalidFileOrTextInput, Astro.preferredLocale),
+  );
 }
 ---

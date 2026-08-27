@@ -1,6 +1,6 @@
 ---
 import SearchBar from "@/components/SearchBar.astro";
-import "../assets/styles.css";
+import { TranslationKeys, t } from "@/utils/i18n";
 
 const { title } = Astro.props;
 let base = import.meta.env.BASE_URL;
@@ -10,23 +10,35 @@ if (base.endsWith("/")) {
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="fr">
   <head>
     <base href={base + "/"} />
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
-    <link rel="icon" type="image/x-icon" href={`./favicon.ico`} />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/x-icon" href="./favicon.ico" />
+    <link rel="stylesheet" href="./styles.css" />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
   </head>
   <body>
     <header class="navbar">
-      <a href="./" class="navbar-title">File Server</a>
-      <SearchBar />
+      <a href="./" class="navbar-title"
+        >{t(TranslationKeys.AppName, Astro.preferredLocale)}</a
+      >
+      <div id="header-search-bar">
+        <SearchBar />
+      </div>
     </header>
 
     <main>
       <slot />
     </main>
+
+    <footer>
+      {t(TranslationKeys.DevelopedBy, Astro.preferredLocale)}
+      <a href="https://billuc.github.io">Luc Billaud</a>
+      {t(TranslationKeys.Using, Astro.preferredLocale)}
+      Astro, Deno & SQLite
+    </footer>
   </body>
 </html>

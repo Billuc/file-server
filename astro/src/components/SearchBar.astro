@@ -1,5 +1,5 @@
 ---
-
+import { t, TranslationKeys } from "@/utils/i18n";
 ---
 
 <form class="search-bar">
@@ -9,28 +9,23 @@
     type="text"
     placeholder="e.g., a-b-c-d"
     required
-    pattern="[a-z]+-[a-z]+-[a-z]+-[a-z]+"
     class="search-bar-input"
+    data-error={t(TranslationKeys.InvalidKeyFormat, Astro.preferredLocale)}
   />
-  <button type="submit" class="search-bar-button">Search</button>
+  <button type="submit" class="search-bar-button"
+    >{t(TranslationKeys.Search, Astro.preferredLocale)}</button
+  >
 </form>
 
 <script>
-  const keyPattern = /^[a-z]+-[a-z]+-[a-z]+-[a-z]+$/;
-
   function onFileSearch(event: Event) {
     event.preventDefault();
     const form = event.target as HTMLFormElement;
     const input = form.elements.namedItem("key") as HTMLInputElement;
     const key = input.value.trim();
 
-    // Validate the key format
-    if (!keyPattern.test(key)) {
-      alert("Invalid key format. Please use the format: aaaa-bbb-ccccc-dddd");
-    } else {
-      // Redirect to the file page with the provided key
-      window.location.href = `./${key}`;
-    }
+    // Redirect to the file page with the provided key
+    window.location.href = `./${encodeURIComponent(key)}`;
   }
 
   document

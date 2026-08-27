@@ -8,22 +8,29 @@ import { InternalError } from "@/utils/InternalError";
 import { verifyPassword } from "../utils/passwordUtils";
 import Layout from "@/layouts/Layout.astro";
 import FilePage from "@/components/FilePage.astro";
+import { t, TranslationKeys } from "@/utils/i18n";
+import normalizeKey from "@/utils/normalizeKey";
 
-// Astro component script
-const fileId = Astro.params["key"];
+const fileId = normalizeKey(Astro.params["key"]);
 
 let file = fileId
   ? await db.select().from(files).where(eq(files.id, fileId)).get()
   : null;
 
 if (!file) {
-  throw new InternalError(404, "File Not Found");
+  throw new InternalError(
+    404,
+    t(TranslationKeys.NotFound, Astro.preferredLocale),
+  );
 }
 
 // Check if file has expired
 const now = new Date();
 if (file.expiresAt && now > file.expiresAt) {
-  throw new InternalError(410, "File has expired");
+  throw new InternalError(
+    410,
+    t(TranslationKeys.FileHasExpired, Astro.preferredLocale),
+  );
 }
 
 let passwordConfirmed = false;
@@ -37,32 +44,55 @@ if (Astro.request.method === "POST") {
 
 const isPasswordValid = await verifyPassword(password, file.password);
 if (isPasswordValid) {
-  console.log("Password correct.");
+  console.log("Password is correct.");
   passwordConfirmed = true;
 }
 ---
 
-<Layout title={!passwordConfirmed ? "Password Required" : file.name}>
+<Layout
+  title={!passwordConfirmed
+    ? t(TranslationKeys.PasswordRequired, Astro.preferredLocale)
+    : file.name}
+>
   {
     passwordConfirmed ? (
       <FilePage file={file} />
     ) : (
       <form method="POST" class="password-form">
-        <h2>This file is password protected.</h2>
+        <h2>
+          {t(TranslationKeys.FileIsPasswordProtected, Astro.preferredLocale)}
+        </h2>
 
         {password !== "" && (
-          <div style="color: red;">Incorrect password. Please try again.</div>
+          <div style="color: red;">
+            {t(TranslationKeys.IncorrectPassword, Astro.preferredLocale)}
+          </div>
         )}
 
         <input
           type="password"
           name="password"
-          placeholder="Enter Password"
+          placeholder={t(
+            TranslationKeys.PasswordPlaceholder,
+            Astro.preferredLocale,
+          )}
           required
         />
 
-        <button type="submit">Submit</button>
+        <button type="submit">
+          {t(TranslationKeys.Unlock, Astro.preferredLocale)}
+        </button>
       </form>
     )
   }
 </Layout>
+
+<script>
+  import { addFile } from "@/utils/clientStorage";
+
+  const fileIdEl = document.getElementById("file-id");
+  if (fileIdEl) {
+    const fileId = fileIdEl.textContent;
+    addFile(fileId);
+  }
+</script>

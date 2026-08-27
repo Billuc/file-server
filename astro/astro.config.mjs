@@ -1,19 +1,26 @@
 // @ts-check
 import { defineConfig } from "astro/config";
 import db from "@astrojs/db";
-import node from "@astrojs/node";
-import { loadEnvFile } from "node:process";
+import bun from "@nurodev/astro-bun";
 
-loadEnvFile();
-console.log("base is", process.env.ASTRO_BASE)
+console.log("base is", Bun.env.ASTRO_BASE);
 
 // https://astro.build/config
 export default defineConfig({
   integrations: [db()],
 
-  base: process.env.ASTRO_BASE || "/",
+  base: Bun.env.ASTRO_BASE || "/",
 
-  adapter: node({
-    mode: "middleware",
-  }),
+  adapter: bun({ port: Bun.env.ASTRO_PORT }),
+  output: "server",
+
+  i18n: {
+    locales: ["fr", "en"],
+    defaultLocale: "fr",
+  },
+
+  security: {
+    // Deactivated checkOrigin because Cloudflare Tunneling changes url from https to http
+    checkOrigin: false,
+  },
 });

@@ -1,6 +1,6 @@
-import { promises as fs } from "fs";
 import path from "path";
-import { InternalError } from "./InternalError";
+import { promises as fs } from "fs";
+import { InternalError } from "./InternalError.ts";
 
 export type FileType = "image" | "audio" | "video" | "binary" | "text";
 
@@ -66,26 +66,19 @@ export async function readTextFile(
   try {
     const fileHandle = await fs.open(filePath, "r");
     const stats = await fileHandle.stat();
+    const buffer = Buffer.alloc(MAX_FILE_PREVIEW_SIZE); // 2 MB buffer
+    await fileHandle.read(buffer, 0, MAX_FILE_PREVIEW_SIZE, null);
+    await fileHandle.close();
+    const data = buffer.toString("utf8");
 
     if (stats.size > MAX_FILE_PREVIEW_SIZE) {
-      let buffer = Buffer.alloc(MAX_FILE_PREVIEW_SIZE); // 2 MB buffer
-      let offset = buffer.write(
-        "File too large, showing first 2MB only... Download to get the full file !\n\n",
-        "utf8",
+      return (
+        "File too large, showing first 2MB only... Download to get the full file !\n\n" +
+        data
       );
-      const result = await fileHandle.read(
-        buffer,
-        offset,
-        buffer.length - offset,
-        0,
-      );
-      await fileHandle.close();
-      return result.buffer.toString("utf8");
     }
 
-    const content = await fileHandle.readFile("utf-8");
-    await fileHandle.close();
-    return content;
+    return data;
   } catch (error) {
     console.error(`Failed to read file from filesystem: ${filePath}`, error);
     throw new InternalError(
@@ -105,8 +98,8 @@ export async function fileExists(
   const filePath = getFilePath(key, filename);
 
   try {
-    await fs.access(filePath);
-    return true;
+    const fileinfo = await fs.stat(filePath);
+    return fileinfo.isFile();
   } catch {
     return false;
   }

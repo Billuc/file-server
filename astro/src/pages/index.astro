@@ -2,10 +2,20 @@
 import SearchBar from "@/components/SearchBar.astro";
 import Layout from "@/layouts/Layout.astro";
 import UploadForm from "@/components/UploadForm.astro";
+import { t, TranslationKeys } from "@/utils/i18n";
+import YourFiles from "@/components/YourFiles.astro";
 ---
 
-<Layout title="File Server">
-  <h1 class="home-title">Welcome to the File Server</h1>
+<Layout title={t(TranslationKeys.AppName, Astro.preferredLocale)}>
+  <h1 class="home-title">
+    {t(TranslationKeys.AppName, Astro.preferredLocale)} - {
+      t(TranslationKeys.AppDescription, Astro.preferredLocale)
+    }
+  </h1>
+  <p class="home-message">
+    {t(TranslationKeys.HomepageMessage, Astro.preferredLocale)}
+  </p>
   <SearchBar />
   <UploadForm />
+  <YourFiles />
 </Layout>

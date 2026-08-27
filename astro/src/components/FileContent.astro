@@ -1,5 +1,6 @@
 ---
 import { getExtension, readTextFile, type FileType } from "@/utils/fileUtils";
+import { t, TranslationKeys } from "@/utils/i18n";
 import type { CodeLanguage } from "astro";
 import { Code } from "astro:components";
 
@@ -25,7 +26,7 @@ if (fileType === "text") {
   {
     fileType === "image" && (
       <img
-        src={`./f/${file.id}?enc=${encodeURIComponent(file.password)}`}
+        src={`./f/${encodeURIComponent(file.id)}?enc=${encodeURIComponent(file.password)}`}
         alt={file.name}
       />
     )
@@ -34,9 +35,9 @@ if (fileType === "text") {
     fileType === "audio" && (
       <audio controls>
         <source
-          src={`./f/${file.id}?enc=${encodeURIComponent(file.password)}`}
+          src={`./f/${encodeURIComponent(file.id)}?enc=${encodeURIComponent(file.password)}`}
         />
-        Your browser does not support the audio element.
+        {t(TranslationKeys.AudioNotSupported, Astro.preferredLocale)}
       </audio>
     )
   }
@@ -44,13 +45,17 @@ if (fileType === "text") {
     fileType === "video" && (
       <video controls>
         <source
-          src={`./f/${file.id}?enc=${encodeURIComponent(file.password)}`}
+          src={`./f/${encodeURIComponent(file.id)}?enc=${encodeURIComponent(file.password)}`}
         />
-        Your browser does not support the video element.
+        {t(TranslationKeys.VideoNotSupported, Astro.preferredLocale)}
       </video>
     )
   }
-  {fileType === "binary" && <div>Binary file. Cannot display content.</div>}
+  {
+    fileType === "binary" && (
+      <div>{t(TranslationKeys.CannotDisplayBinary, Astro.preferredLocale)}</div>
+    )
+  }
   {
     fileType === "text" && (
       <Code

@@ -1,5 +1,5 @@
-import { hashPassword } from "@/utils/passwordUtils";
-import { db, File } from "astro:db";
+import { hashPassword } from "@/utils/passwordUtils.ts";
+import { db, files } from "astro:db";
 
 // https://astro.build/db/seed
 export default async function seed() {
@@ -34,5 +34,5 @@ export default async function seed() {
     },
   ];
 
-  await db.insert(File).values(sampleFiles);
+  await db.insert(files).values(sampleFiles);
 }
