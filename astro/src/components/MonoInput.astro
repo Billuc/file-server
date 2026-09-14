@@ -1,0 +1,21 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+
+interface Props extends HTMLAttributes<"input"> {
+  label: string;
+}
+
+const { label, ...props } = Astro.props;
+---
+
+<label>
+    {label}{' '}
+    &gt;
+    <input {...props} />
+</label>
+
+<style>
+label {
+    margin-right: 1rem;
+}
+</style>

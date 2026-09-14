@@ -7,15 +7,23 @@ import YourFiles from "@/components/YourFiles.astro";
 ---
 
 <Layout title={t(TranslationKeys.AppName, Astro.preferredLocale)}>
-  <h1 class="home-title">
-    {t(TranslationKeys.AppName, Astro.preferredLocale)} - {
-      t(TranslationKeys.AppDescription, Astro.preferredLocale)
-    }
-  </h1>
+  <header>
+      <h1>
+      {t(TranslationKeys.AppName, Astro.preferredLocale)}
+    </h1>
+    <div>
+      {t(TranslationKeys.AppDescription, Astro.preferredLocale)}
+    </div>
+  </header>
+  <div>
+  </div>
   <p class="home-message">
     {t(TranslationKeys.HomepageMessage, Astro.preferredLocale)}
   </p>
+
   <SearchBar />
+  <hr/>
   <UploadForm />
+  <hr/>
   <YourFiles />
 </Layout>

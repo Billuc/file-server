@@ -21,15 +21,6 @@ if (base.endsWith("/")) {
     <title>{title}</title>
   </head>
   <body>
-    <header class="navbar">
-      <a href="./" class="navbar-title"
-        >{t(TranslationKeys.AppName, Astro.preferredLocale)}</a
-      >
-      <div id="header-search-bar">
-        <SearchBar />
-      </div>
-    </header>
-
     <main>
       <slot />
     </main>

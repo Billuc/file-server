@@ -1,17 +1,19 @@
 ---
 import { t, TranslationKeys } from "@/utils/i18n";
+import MonoInput from "./MonoInput.astro";
 ---
 
 <form class="search-bar">
-  <input
-    id="key"
-    name="key"
-    type="text"
-    placeholder="e.g., a-b-c-d"
-    required
-    class="search-bar-input"
-    data-error={t(TranslationKeys.InvalidKeyFormat, Astro.preferredLocale)}
-  />
+    <MonoInput
+        label="Search an upload"
+        id="key"
+        name="key"
+        type="text"
+        placeholder="e.g., a-b-c-d"
+        required
+        class="search-bar-input"
+        data-error={t(TranslationKeys.InvalidKeyFormat, Astro.preferredLocale)}
+    />
   <button type="submit" class="search-bar-button"
     >{t(TranslationKeys.Search, Astro.preferredLocale)}</button
   >
