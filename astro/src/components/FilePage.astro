@@ -3,6 +3,8 @@ import { getFileType } from "@/utils/fileUtils";
 import { nullPassword } from "@/utils/passwordUtils";
 import FileContent from "./FileContent.astro";
 import { t, TranslationKeys } from "@/utils/i18n";
+import MonoHeader from "./MonoHeader.astro";
+import { renderUnicode } from "uqr";
 
 interface Props {
   file: {
@@ -14,55 +16,46 @@ interface Props {
 
 const { file } = Astro.props;
 
-const hasNoPassword = await nullPassword(file.password);
 const fileType = getFileType(file.name);
+const unicodeQR = renderUnicode(Astro.url.href);
 ---
 
-<section class="file-header">
-  <h2>{file.name}</h2>
-  <span>(<i style="user-select: all" id="file-id">{file.id}</i>)</span>
-  {
-    !hasNoPassword && (
-      <span class="password-protected">
-        🔒 {t(TranslationKeys.PasswordProtected, Astro.preferredLocale)}
-      </span>
-    )
-  }
+<MonoHeader title={file.name} subtitle={file.id} />
 
-  <div class="spacer"></div>
-
-  <div class="file-buttons">
+<section style="margin-block: 1rem;">
     {
       fileType === "text" && (
         <button
           id="copy-button"
-          class="file-button"
           data-success={t(
             TranslationKeys.ContentCopiedToClipboard,
             Astro.preferredLocale,
           )}
         >
-          {t(TranslationKeys.Copy, Astro.preferredLocale)}
+          {t(TranslationKeys.CopyContent, Astro.preferredLocale)}
         </button>
       )
     }
     <a
-      href={`./f/${encodeURIComponent(file.id)}?download=true&enc=${encodeURIComponent(
+      href={`./f/${encodeURIComponent(file.id)}?enc=${encodeURIComponent(
         file.password,
       )}`}
-      class="file-button"
-    >
-      {t(TranslationKeys.Download, Astro.preferredLocale)}
-    </a>
+      download={file.name}
+    >{
+      t(TranslationKeys.Download, Astro.preferredLocale)
+    }</a>
     <button
       id="share-button"
-      class="file-button"
       data-success={t(
         TranslationKeys.UrlCopiedToClipboard,
         Astro.preferredLocale,
-      )}>{t(TranslationKeys.Share, Astro.preferredLocale)}</button
+      )}>{t(TranslationKeys.CopyURL, Astro.preferredLocale)}</button
     >
-  </div>
+    <button
+      id="show-qr-button"
+      >{t(TranslationKeys.ShowQR, Astro.preferredLocale)}</button
+    >
+    <div id="qrcode" style="display: none; line-height: 1rem;">{unicodeQR}</div>
 </section>
 
 <FileContent file={file} fileType={fileType} />
@@ -71,6 +64,8 @@ const fileType = getFileType(file.name);
   document.addEventListener("DOMContentLoaded", () => {
     const copyButton = document.getElementById("copy-button")!;
     const shareButton = document.getElementById("share-button")!;
+    const showQRButton = document.getElementById("show-qr-button")!;
+    const qrcodeDiv = document.getElementById("qrcode")!;
     const fileContent = document.getElementById("file-content")!;
 
     if (copyButton) {
@@ -87,7 +82,11 @@ const fileType = getFileType(file.name);
         alert(shareButton.dataset.success || "Copié");
       });
     };
-
     shareButton.addEventListener("click", shareContent);
+
+    const toggleQR = () => {
+      qrcodeDiv.style.display = qrcodeDiv.style.display === "none" ? "block" : "none";
+    }
+    showQRButton.addEventListener("click", toggleQR);
   });
 </script>

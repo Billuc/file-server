@@ -1,5 +1,4 @@
 ---
-import SearchBar from "@/components/SearchBar.astro";
 import { TranslationKeys, t } from "@/utils/i18n";
 
 const { title } = Astro.props;
@@ -21,6 +20,10 @@ if (base.endsWith("/")) {
     <title>{title}</title>
   </head>
   <body>
+      {Astro.routePattern !== "/" && <div style="margin-bottom: 1rem;">
+          <a href="/">Back to home</a>
+      </div>}
+
     <main>
       <slot />
     </main>

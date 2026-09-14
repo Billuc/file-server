@@ -97,29 +97,9 @@ h1 {
 }
 
 /* File page styles */
-.file-header {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
-}
-
-.file-header h2 {
-  margin: 0;
-}
-
 #file-content > * {
   max-width: 100%;
   object-fit: contain;
-}
-
-.astro-code {
-  border-radius: 4px;
-  margin-bottom: 1rem;
-  min-height: 200px;
-  padding: 0.5rem;
-  text-align: start;
 }
 
 code {
@@ -156,12 +136,6 @@ code .line::before {
   border: 1px solid #ccc;
   border-radius: 4px;
   width: 250px;
-}
-
-/* File page enhancements */
-.password-protected {
-  color: #e74c3c;
-  font-size: 0.9rem;
 }
 
 /* Password form styles */
@@ -261,7 +235,8 @@ textarea {
   box-sizing: border-box;
 }
 
-button {
+button,
+a[download] {
   padding: 0;
   margin: 0;
   border: 0;
@@ -269,14 +244,18 @@ button {
   font-size: 1rem;
   background: none;
   color: var(--action);
+  cursor: pointer;
 }
-button::before {
+button::before,
+a[download]::before {
   content: "< ";
 }
-button::after {
+button::after,
+a[download]::after {
   content: " >";
 }
-button:hover {
+button:hover,
+a[download]:hover {
   background: var(--action);
   color: var(--background);
 }

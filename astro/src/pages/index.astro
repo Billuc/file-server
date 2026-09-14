@@ -4,26 +4,21 @@ import Layout from "@/layouts/Layout.astro";
 import UploadForm from "@/components/UploadForm.astro";
 import { t, TranslationKeys } from "@/utils/i18n";
 import YourFiles from "@/components/YourFiles.astro";
+import MonoHeader from "@/components/MonoHeader.astro";
 ---
 
 <Layout title={t(TranslationKeys.AppName, Astro.preferredLocale)}>
-  <header>
-      <h1>
-      {t(TranslationKeys.AppName, Astro.preferredLocale)}
-    </h1>
-    <div>
-      {t(TranslationKeys.AppDescription, Astro.preferredLocale)}
-    </div>
-  </header>
-  <div>
-  </div>
-  <p class="home-message">
-    {t(TranslationKeys.HomepageMessage, Astro.preferredLocale)}
-  </p>
+    <MonoHeader
+        title={t(TranslationKeys.AppName, Astro.preferredLocale)}
+        subtitle={t(TranslationKeys.AppDescription, Astro.preferredLocale)}
+    />
+    <p class="home-message">
+        {t(TranslationKeys.HomepageMessage, Astro.preferredLocale)}
+    </p>
 
-  <SearchBar />
-  <hr/>
-  <UploadForm />
-  <hr/>
-  <YourFiles />
+    <SearchBar />
+    <hr/>
+    <UploadForm />
+    <hr/>
+    <YourFiles />
 </Layout>
