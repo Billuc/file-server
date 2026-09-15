@@ -4,7 +4,7 @@ import { nullPassword } from "@/utils/passwordUtils";
 import FileContent from "./FileContent.astro";
 import { t, TranslationKeys } from "@/utils/i18n";
 import MonoHeader from "./MonoHeader.astro";
-import { renderUnicode } from "uqr";
+import { renderSVG } from "uqr";
 
 interface Props {
   file: {
@@ -17,7 +17,7 @@ interface Props {
 const { file } = Astro.props;
 
 const fileType = getFileType(file.name);
-const unicodeQR = renderUnicode(Astro.url.href);
+const unicodeQR = renderSVG(Astro.url.href);
 ---
 
 <MonoHeader title={file.name} subtitle={file.id} />
@@ -55,7 +55,7 @@ const unicodeQR = renderUnicode(Astro.url.href);
       id="show-qr-button"
       >{t(TranslationKeys.ShowQR, Astro.preferredLocale)}</button
     >
-    <div id="qrcode" style="display: none; line-height: 1rem;">{unicodeQR}</div>
+    <div id="qrcode" style="display: none; line-height: 1rem;" set:html={unicodeQR}>
 </section>
 
 <FileContent file={file} fileType={fileType} />
