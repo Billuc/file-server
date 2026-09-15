@@ -151,8 +151,7 @@ textarea {
   box-sizing: border-box;
 }
 
-button,
-a[download] {
+button {
   padding: 0;
   margin: 0;
   border: 0;
@@ -165,16 +164,13 @@ a[download] {
     background 0.3s ease,
     color 0.3s ease;
 }
-button::before,
-a[download]::before {
+button::before {
   content: "< ";
 }
-button::after,
-a[download]::after {
+button::after {
   content: " >";
 }
-button:hover,
-a[download]:hover {
+button:hover {
   background: var(--action);
   color: var(--background);
 }

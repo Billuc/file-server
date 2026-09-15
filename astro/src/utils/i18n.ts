@@ -50,6 +50,7 @@ export enum TranslationKeys {
   UrlCopiedToClipboard,
   Using,
   VideoNotSupported,
+  ViewFile,
 }
 
 const TRANSLATIONS: { [l in Lang]: { [k in TranslationKeys]: string } } = {
@@ -108,6 +109,7 @@ const TRANSLATIONS: { [l in Lang]: { [k in TranslationKeys]: string } } = {
     [TranslationKeys.Using]: "using",
     [TranslationKeys.VideoNotSupported]:
       "Your browser does not support video elements.",
+    [TranslationKeys.ViewFile]: "View file",
   },
   fr: {
     [TranslationKeys.AppName]: "Partag'Express",
@@ -167,6 +169,7 @@ const TRANSLATIONS: { [l in Lang]: { [k in TranslationKeys]: string } } = {
     [TranslationKeys.Using]: "avec",
     [TranslationKeys.VideoNotSupported]:
       "Votre navigateur ne peut pas lire les fichiers video.",
+    [TranslationKeys.ViewFile]: "Voir le fichier",
   },
 };
 

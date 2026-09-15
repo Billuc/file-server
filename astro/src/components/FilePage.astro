@@ -23,6 +23,22 @@ const unicodeQR = renderSVG(Astro.url.href);
 <MonoHeader title={file.name} subtitle={file.id} />
 
 <section style="margin-block: 1rem;">
+    <a
+      href={`./f/${encodeURIComponent(file.id)}?enc=${encodeURIComponent(
+        file.password,
+      )}`}
+      download={file.name}
+    >{
+      t(TranslationKeys.Download, Astro.preferredLocale)
+    }</a>
+    <a
+      href={`./f/${encodeURIComponent(file.id)}?enc=${encodeURIComponent(
+        file.password,
+      )}`}
+    >{
+      t(TranslationKeys.ViewFile, Astro.preferredLocale)
+    }</a>
+    <br/>
     {
       fileType === "text" && (
         <button
@@ -36,14 +52,6 @@ const unicodeQR = renderSVG(Astro.url.href);
         </button>
       )
     }
-    <a
-      href={`./f/${encodeURIComponent(file.id)}?enc=${encodeURIComponent(
-        file.password,
-      )}`}
-      download={file.name}
-    >{
-      t(TranslationKeys.Download, Astro.preferredLocale)
-    }</a>
     <button
       id="share-button"
       data-success={t(

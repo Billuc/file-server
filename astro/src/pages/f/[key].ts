@@ -3,9 +3,11 @@ import { db, files } from "astro:db";
 import { eq } from "astro:db";
 import { InternalError } from "@/utils/InternalError.ts";
 import { promises as fs } from "fs";
-import { getFilePath, fileExists, getFileType } from "../../utils/fileUtils.ts";
+import { getFilePath, fileExists } from "../../utils/fileUtils.ts";
 import { t, TranslationKeys } from "@/utils/i18n.ts";
 import normalizeKey from "../../utils/normalizeKey.ts";
+import { lookup } from "mrmime";
+import { nullPassword } from "@/utils/passwordUtils.ts";
 
 export const prerender = false;
 
@@ -42,7 +44,10 @@ export const GET: APIRoute = async ({ params, url, preferredLocale }) => {
     }
 
     // Check password if required
-    if (file.password !== enc) {
+    if (
+      (enc === null && !(await nullPassword(file.password))) ||
+      (enc !== null && file.password !== enc)
+    ) {
       return new Response(
         JSON.stringify({
           error: t(TranslationKeys.IncorrectPassword, preferredLocale),
@@ -68,10 +73,7 @@ export const GET: APIRoute = async ({ params, url, preferredLocale }) => {
     const fileContent = await fs.readFile(filePath);
 
     const headers: HeadersInit = {
-      "Content-Type":
-        getFileType(file.name) !== "text"
-          ? "application/octet-stream"
-          : "text/plain",
+      "Content-Type": lookup(file.name) ?? "application/octet-stream",
       "Content-Disposition": download
         ? `attachment; filename="${file.name}"`
         : `inline; filename="${file.name}"`,
