@@ -10,6 +10,7 @@ import Layout from "@/layouts/Layout.astro";
 import FilePage from "@/components/FilePage.astro";
 import { t, TranslationKeys } from "@/utils/i18n";
 import normalizeKey from "@/utils/normalizeKey";
+import PasswordForm from "@/components/PasswordForm.astro";
 
 const fileId = normalizeKey(Astro.params["key"]);
 
@@ -54,35 +55,12 @@ if (isPasswordValid) {
     ? t(TranslationKeys.PasswordRequired, Astro.preferredLocale)
     : file.name}
 >
+    <div style="display: none;" id="file-id">{file.id}</div>
   {
     passwordConfirmed ? (
       <FilePage file={file} />
     ) : (
-      <form method="POST" class="password-form">
-        <h2>
-          {t(TranslationKeys.FileIsPasswordProtected, Astro.preferredLocale)}
-        </h2>
-
-        {password !== "" && (
-          <div style="color: red;">
-            {t(TranslationKeys.IncorrectPassword, Astro.preferredLocale)}
-          </div>
-        )}
-
-        <input
-          type="password"
-          name="password"
-          placeholder={t(
-            TranslationKeys.PasswordPlaceholder,
-            Astro.preferredLocale,
-          )}
-          required
-        />
-
-        <button type="submit">
-          {t(TranslationKeys.Unlock, Astro.preferredLocale)}
-        </button>
-      </form>
+      <PasswordForm password={password} />
     )
   }
 </Layout>

@@ -9,7 +9,7 @@ const key = generateRandomKey();
 ---
 
 <Layout title={t(TranslationKeys.KeyGeneration, Astro.preferredLocale)}>
-  <span>{key}</span>
+    <span style="user-select: all;">{key}</span>
   <button onclick="location.reload()"
     >{t(TranslationKeys.NewKey, Astro.preferredLocale)}</button
   >
