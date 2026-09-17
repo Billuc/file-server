@@ -58,6 +58,16 @@ while (insertAttempts < MAX_INSERT_ATTEMPTS) {
   if (res.rowsAffected === 1) {
     // Save to filesystem
     await saveFile(key, extractedFile);
+
+    if (!Astro.request.headers.get("referer")) {
+      const rawFileUrl = new URL(`./f/${encodeURIComponent(key)}`, Astro.url);
+      rawFileUrl.searchParams.set("enc", hashedPassword);
+      return Response.json({
+          key,
+          url: rawFileUrl,
+      });
+    }
+
     return Astro.redirect(`./${encodeURIComponent(key)}`);
   }
 

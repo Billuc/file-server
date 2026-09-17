@@ -1,0 +1,124 @@
+{
+  "openapi": "3.1.1",
+  "info": {
+    "title": "Partag'Express API",
+    "version": "1.0.0",
+    "description": "Upload files and receive an easy-to-remember 4 words identifier and a URL where the document is available."
+  },
+  "paths": {
+    "/upload": {
+      "post": {
+        "operationId": "uploadHtml",
+        "summary": "Upload an HTML document",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "required": [],
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "A file object."
+                  },
+                  "text": {
+                    "type": "string",
+                    "description": "Some text content to save."
+                  },
+                  "filename": {
+                    "type": "string",
+                    "description": "The name under which to save the text content."
+                  },
+                  "password": {
+                    "type": "string",
+                    "format": "password",
+                    "description": "An optional password to protect the file"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The document was stored successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["key", "url"],
+                  "properties": {
+                    "key": {
+                      "type": "string"
+                    },
+                    "url": {
+                      "type": "string",
+                      "format": "uri-reference"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The request did not include either a valid file or a valid text content."
+          },
+          "405": {
+            "description": "The request method wasn't POST."
+          },
+          "413": {
+            "description": "The uploaded file was too large (>10MB)."
+          },
+          "500": {
+            "description": "Could not upload the file due to too many key conflicts."
+          }
+        }
+      }
+    },
+    "/f/{key}": {
+      "get": {
+        "operationId": "getHtml",
+        "summary": "Retrieve an uploaded file",
+        "parameters": [
+          {
+            "name": "key",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "enc",
+            "in": "query",
+            "required": false,
+            "description": "The hashed password for the requested file.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The stored file.",
+            "content": {}
+          },
+          "401": {
+            "description": "Password isn't provided or is incorrect."
+          },
+          "404": {
+            "description": "No document exists for that file ID."
+          },
+          "410": {
+            "description": "The requested file has expired."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+      }
+    }
+  }
+}

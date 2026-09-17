@@ -1,0 +1,13 @@
+# File Server
+
+Upload files and receive an easy-to-remember 4 words identifier and a URL where the document is available.
+
+## API
+
+- OpenAPI specification: /openapi.json
+- Upload: POST /upload using multipart/form-data with either:
+  - a "file" field containing a File object + an optional "password" field.
+  - a raw "text" field + optional "filename" and "password" fields.
+- Retrieve: GET /f/{fileId}; if file was uploaded with a password, a enc parameter with the hashed password is required.
+
+A successful upload returns JSON with the generated "key" and the absolute "url" for the uploaded document.
