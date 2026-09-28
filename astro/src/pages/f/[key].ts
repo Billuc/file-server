@@ -76,7 +76,7 @@ export const GET: APIRoute = async ({ params, url, preferredLocale }) => {
       "Content-Type": lookup(file.name) ?? "application/octet-stream",
       "Content-Disposition": download
         ? `attachment; filename="${file.name}"`
-        : `inline; filename="${file.name}"`,
+        : "inline",
     };
 
     // Create a downloadable response
