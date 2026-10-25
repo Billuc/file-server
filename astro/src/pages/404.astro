@@ -6,7 +6,9 @@ import { t, TranslationKeys } from "@/utils/i18n";
 ---
 
 <Layout title={"404 - " + t(TranslationKeys.NotFound, Astro.preferredLocale)}>
-  <h1>404 - {t(TranslationKeys.NotFound, Astro.preferredLocale)}</h1>
+  <header>
+    <h1>404 - {t(TranslationKeys.NotFound, Astro.preferredLocale)}</h1>
+  </header>
   <p>
     {t(TranslationKeys.NotFoundMessage, Astro.preferredLocale)}
     <a href="./">{t(TranslationKeys.HomePage, Astro.preferredLocale)}</a>.

@@ -20,8 +20,8 @@ if (base.endsWith("/")) {
     <title>{title}</title>
   </head>
   <body>
-      {Astro.routePattern !== "/" && <div style="margin-bottom: 1rem;">
-          <a href="./">Back to home</a>
+      {Astro.routePattern !== "/" && <div style="width: 100%; background: var(--primary);">
+        <a href="./" style="color: var(--text-2);">Back to home</a>
       </div>}
 
     <main>

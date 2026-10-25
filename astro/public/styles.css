@@ -1,37 +1,40 @@
 :root {
-  --primary: #fca311;
-  --secondary: #324f9a;
-  --background: #ffffff;
-  --background-2: #e5e5e5;
-  --text: #000000;
-  --action: #b65466;
+  --primary: #0057C8;
+  --secondary: #E10600;
+  --background: white;
+  --background-2: #0A1020;
+  --text: #0A1020;
+  --text-2: white;
+  --text-3: cyan;
+  --success: #17B26A;
+  --error: #E10600;
 
   --font-size-xs: 10px;
-  --font-size-sm: 14px;
-  --font-size-md: 16px;
-  --font-size-lg: 20px;
+  --font-size-sm: 12px;
+  --font-size-md: 14px;
+  --font-size-lg: 18px;
 
   font-size: var(--font-size-xs);
 
-  --char-width-xs: 25ch;
-  --char-width-sm: 30ch;
-  --char-width-md: 40ch;
-  --char-width-lg: 50ch;
+  --char-width-xs: 30ch;
+  --char-width-sm: 40ch;
+  --char-width-md: 50ch;
+  --char-width-lg: 60ch;
 }
 
-@media screen and (min-width: 260px) {
+@media screen and (min-width: 320px) {
   :root {
     font-size: var(--font-size-sm);
   }
 }
 
-@media screen and (min-width: 430px) {
+@media screen and (min-width: 480px) {
   :root {
     font-size: var(--font-size-md);
   }
 }
 
-@media screen and (min-width: 650px) {
+@media screen and (min-width: 768px) {
   :root {
     font-size: var(--font-size-lg);
   }
@@ -41,27 +44,28 @@
 body {
   font-family: "Courier New", Courier, monospace;
   font-size: 1rem;
-  width: var(--char-width-xs);
-  margin: 1rem auto;
+  /* width: var(--char-width-xs); */
+  margin: 0;
   padding: 0;
   background-color: var(--background);
   color: var(--text);
 }
-@media screen and (min-width: 260px) {
+/* @media screen and (min-width: 320px) {
   body {
     width: var(--char-width-sm);
   }
 }
-@media screen and (min-width: 430px) {
+@media screen and (min-width: 480px) {
   body {
     width: var(--char-width-md);
   }
 }
-@media screen and (min-width: 650px) {
+@media screen and (min-width: 768px) {
   body {
     width: var(--char-width-lg);
   }
 }
+*/
 
 body > * {
   font-size: 1rem;
@@ -70,21 +74,67 @@ body > * {
 header {
   text-transform: uppercase;
   font-weight: normal;
-  border-width: 2px;
-  border-style: solid;
-  border-color: currentColor;
-  padding: calc(1rem - 2px);
+  margin-bottom: 3rem;
+  position: relative;
+  padding: 0 1ch;
   background: var(--primary);
+  color: var(--text-2);
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-evenly;
+  align-items: baseline;
 }
 
 h1 {
   margin: 0;
   font-size: 2rem;
   text-transform: uppercase;
+  font-weight: bold;
+  font-style: italic;
+  position: relative;
+  width: fit-content;
+  border-left: 1ch double currentColor;
+  padding-left: 2ch;
+  padding-block: 1rem;
+}
+
+h2 {
+  margin: 0 0 0 2ch;
+  font-size: 1rem;
+  text-transform: uppercase;
   font-weight: normal;
 }
 
-/* File page styles */
+section {
+  font-weight: normal;
+  margin-bottom: 2rem;
+  margin-inline: auto;
+  position: relative;
+  border-bottom: 1rem double var(--primary);
+  width: var(--char-width-xs);
+}
+
+@media screen and (min-width: 320px) {
+  section {
+    width: var(--char-width-sm);
+  }
+}
+@media screen and (min-width: 480px) {
+  section {
+    width: var(--char-width-md);
+  }
+}
+@media screen and (min-width: 768px) {
+  section {
+    width: var(--char-width-lg);
+  }
+}
+
+p::before {
+  content: '$ ';
+  color: var(--secondary);
+}
+
 #file-content > * {
   max-width: 100%;
   object-fit: contain;
@@ -102,7 +152,7 @@ code .line::before {
   margin-right: 1.5rem;
   display: inline-block;
   text-align: right;
-  color: color-mix(in oklab, var(--secondary) 40%, transparent 60%);
+  color: alpha(from var(--secondary) / 40%);
 }
 
 h4 {
@@ -112,76 +162,199 @@ h4 {
   margin: 0 0 1rem 0;
 }
 
+div.card {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  width: 100%;
+  gap: 1ch;
+}
+
+div.card > *:nth-child(1),
+div.card > *:nth-child(3) {
+  flex: 0 0 auto;
+}
+
+div.card > *:nth-child(2) {
+  flex: 1 1 auto;
+}
+
 form {
   margin-block: 1rem;
+  padding-inline: 2ch;
 }
 
 label {
-  color: color-mix(in oklab, var(--secondary) 75%, transparent);
+  color: var(--primary);
 }
 
-input {
-  padding: 0;
-  margin: 0;
-  border: 0;
-  outline: 0;
-  font-size: 1rem;
-  color: var(--secondary);
-  position: relative;
-  transition: box-shadow 0.3s ease;
-  box-shadow: 0 -1px 0 0 transparent inset;
+label:has(> input) {
+  width: 100%;
 }
-input:focus {
-  box-shadow: 0 -1px 0 0 color-mix(in oklab, var(--primary) 60%, transparent)
-    inset;
+
+label:has(> input[type="file"]) {
+  width: 15ch;
+}
+label:has(> input[type="file"]) span {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+  width: 15ch;
+  height: 15ch;
+  border: 0.7ch solid var(--primary);
+  border-radius: 50%;
+  position: relative;
+  cursor: pointer;
+  padding: 1ch;
+  box-sizing: border-box;
+  text-align: center;
+  box-shadow: 0 0 1ch 2px alpha(from var(--primary) / 50%);
+  animation: pulseShadow 2s ease-in-out 0s infinite alternate;
+  transition: transform 0.15s ease-out;
+}
+label:has(> input[type="file"]) span::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 85%;
+  height: 85%;
+  border-radius: 50%;
+  border: 1px dashed var(--primary);
+} 
+label:has(> input[type="file"]):hover span {
+  transform: translateY(-2px);
+}
+@keyframes pulseShadow {
+  from {
+    box-shadow: 0 0 1ch 4px alpha(from var(--primary) / 70%);
+  }
+  to {
+    box-shadow: 0 0 1ch -2px alpha(from var(--primary) / 70%);
+  }
+}
+
+label > input[type="file"] {
+  padding: 0;
+  background: none;
+  margin: 0;
+  border: none;
 }
 input[type="file"]::file-selector-button {
   display: none;
 }
 
+input {
+  padding-block: 0;
+  padding-inline: calc(2ch - 2px);
+  margin: 0; 
+  border: none;
+  outline: 0;
+  font-size: 1rem;
+  color: var(--primary);
+  transition: box-shadow 0.15s ease-out;
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  box-shadow: 0px 2px 2px -2px var(--background-2);
+}
+input:focus, input:hover {
+  box-shadow: 2px 3px 4px -1px var(--primary);
+}
+input::placeholder {
+  opacity: 0.8;
+  color: var(--primary);
+}
+
+label:has(> textarea) {
+  width: 100%;
+  font-size: 1rem;
+  padding: 1rem 2ch;
+  background: var(--background-2);
+  color: var(--text-3);
+  box-sizing: border-box;
+  margin-block: calc(0.5rem);
+  border-radius: 1ch;
+  display: block;
+}
+
 textarea {
   width: 100%;
-  border: none;
   font-size: 1rem;
+  border: none;
   outline: 0;
   resize: none;
-  color: var(--secondary);
-  border: 1px solid currentColor;
-  padding: calc(1rem - 1px);
-  box-sizing: border-box;
+  background: var(--background-2);
+  color: var(--text-2);
 }
 
 button {
-  padding: 0;
+  padding: 0 2ch;
   margin: 0;
   border: 0;
+  border-radius: 9999px;
   outline: 0;
   font-size: 1rem;
-  background: none;
-  color: var(--action);
+  font-weight: bold;
+  font-style: italic;
   cursor: pointer;
+  background: var(--primary);
+  color: var(--text-2);
   transition:
-    background 0.3s ease,
-    color 0.3s ease;
+    transform 0.1s ease-out;
+  position: relative;
 }
-button::before {
-  content: "< ";
+button:not(.error):hover {
+  transform: translateY(-2px);
+  box-shadow: 0 2px 8px -2px var(--primary);
 }
-button::after {
-  content: " >";
+button:not(.error)::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -60%;
+  width: 45%;
+  background: linear-gradient(105deg, transparent, rgba(255,255,255,.45), transparent);
+  transform: skewX(-18deg);
+  opacity: 0;
+  pointer-events: none;
 }
-button:hover {
-  background: var(--action);
-  color: var(--background);
+button:hover::before {
+  animation: sweep .55s ease-out 1;
+  opacity: 1;
+}
+button:not(.error):active {
+  transform: translateY(1px);
+}
+@keyframes sweep { to { left: 120%; } }
+
+button.error {
+  background: var(--error);
 }
 
 a {
   color: var(--text);
-  text-decoration: underline var(--primary);
+  text-decoration: underline var(--secondary);
 }
 a::before {
   content: "/";
-  color: var(--primary);
+  color: var(--secondary);
+}
+
+table {
+  border-collapse: collapse;
+}
+table th {
+  padding-bottom: calc(0.5rem - 2px);
+  border-bottom: 2px solid var(--primary);
+}
+table td, table th {
+  padding-top: 0.5rem;
+  padding-inline: 1ch;
+  text-align: center;
 }
 
 footer {
@@ -189,3 +362,4 @@ footer {
   opacity: 70%;
   margin-block: 2rem;
 }
+

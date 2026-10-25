@@ -40,6 +40,7 @@ export enum TranslationKeys {
   PasswordPlaceholder,
   PasswordProtected,
   PasswordRequired,
+  Remove,
   ReturnTo,
   Search,
   SelectFile,
@@ -76,7 +77,7 @@ const TRANSLATIONS: { [l in Lang]: { [k in TranslationKeys]: string } } = {
     [TranslationKeys.FilenamePlaceholder]: "e.g.: notes.txt",
     [TranslationKeys.HomePage]: "homepage",
     [TranslationKeys.HomepageMessage]:
-      "Partag'Express is a simple file server. Upload your file and share it across devices or with friends using a very simple and easy-to-remember key. Be careful though, your files will expire after 7 days !",
+      "Upload any file up to 10MB. Get an easy-to-remember key and share it. Your files automatically expire after 7 days.",
     [TranslationKeys.IncorrectPassword]:
       "Incorrect password. Please try again.",
     [TranslationKeys.InternalServerError]: "Internal Server Error",
@@ -97,6 +98,7 @@ const TRANSLATIONS: { [l in Lang]: { [k in TranslationKeys]: string } } = {
     [TranslationKeys.PasswordPlaceholder]: "Enter a password...",
     [TranslationKeys.PasswordProtected]: "Password protected",
     [TranslationKeys.PasswordRequired]: "A password is required",
+    [TranslationKeys.Remove]: "Remove",
     [TranslationKeys.ReturnTo]: "Return to the",
     [TranslationKeys.Search]: "Search",
     [TranslationKeys.SelectFile]: "Select a file",
@@ -134,7 +136,7 @@ const TRANSLATIONS: { [l in Lang]: { [k in TranslationKeys]: string } } = {
     [TranslationKeys.FilenamePlaceholder]: "par ex.: notes.txt",
     [TranslationKeys.HomePage]: "page d'accueil",
     [TranslationKeys.HomepageMessage]:
-      "Partag'Express est un serveur de fichier facile à utiliser. Envoie ton fichier et partage-le entre tes appareils ou avec tes amis facilement grâce à une clé facile à retenir. Attention: les fichiers expirent au bout de 7 jours !",
+      "Envoie n'importe quel fichier jusqu'à 10MB. Reçoit une clé facile à retenir et partage la. Tes fichiers expirent automatiquement au bout de 7 jours.",
     [TranslationKeys.IncorrectPassword]:
       "Mot de passe incorrect. Veuillez réessayer !",
     [TranslationKeys.InternalServerError]: "Erreur interne au serveur",
@@ -156,6 +158,7 @@ const TRANSLATIONS: { [l in Lang]: { [k in TranslationKeys]: string } } = {
     [TranslationKeys.PasswordPlaceholder]: "Entrez un mot de passe...",
     [TranslationKeys.PasswordProtected]: "Protégé par mot de passe",
     [TranslationKeys.PasswordRequired]: "Mot de passe requis.",
+    [TranslationKeys.Remove]: "Retirer",
     [TranslationKeys.ReturnTo]: "Retour à la",
     [TranslationKeys.Search]: "Rechercher",
     [TranslationKeys.SelectFile]: "Choisissez un fichier",

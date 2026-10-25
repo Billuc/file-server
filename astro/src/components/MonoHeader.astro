@@ -9,5 +9,5 @@ const { title, subtitle } = Astro.props;
 
 <header>
     <h1>{title}</h1>
-    {subtitle ?? <div>{subtitle}</div>}
+    {subtitle && <h2>{subtitle}</h2>}
 </header>

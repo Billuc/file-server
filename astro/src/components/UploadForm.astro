@@ -4,77 +4,80 @@ import MonoInput from "./MonoInput.astro";
 import MonoTextarea from "./MonoTextarea.astro";
 ---
 
-<h4 style="margin-top: 1rem">## {t(TranslationKeys.Upload, Astro.preferredLocale)}</h4>
-
-<form action="./upload" method="POST" enctype="multipart/form-data">
-    <div>
+<section>
+    <form action="./upload" method="POST" enctype="multipart/form-data">
         <h4>{t(TranslationKeys.SelectFile, Astro.preferredLocale)}...</h4>
-        <MonoInput
-            label="File"
-            type="file"
-            name="file"
-            data-errormessage={t(
-            TranslationKeys.FileIsTooLarge,
-            Astro.preferredLocale,
-            )}
-        /><br/>
-        <MonoInput
-            label={
-                t(TranslationKeys.Password, Astro.preferredLocale) + " (" +
-                t(TranslationKeys.Optional, Astro.preferredLocale) + ")"
-            }
-            type="password"
-            name="password"
-            placeholder={t(
-                TranslationKeys.PasswordPlaceholder,
-                Astro.preferredLocale,
-            )}
-        /><br/>
-        <button type="submit">
-            {t(TranslationKeys.Upload, Astro.preferredLocale)}
-        </button>
-    </div>
-</form>
-<form action="./upload" method="POST" enctype="multipart/form-data">
-    <div>
+        <div class="card">
+            <label>
+              <span>Choose a file</span>
+              <input
+                  type="file"
+                  name="file"
+                  data-errormessage={t(
+                  TranslationKeys.FileIsTooLarge,
+                  Astro.preferredLocale,
+                  )}
+              />
+            </label>
+            <div style="display: flex; flex-direction: column; align-items: center; margin-left: 1ch;">
+              <MonoInput
+                  label={
+                      t(TranslationKeys.Password, Astro.preferredLocale) + " (" +
+                      t(TranslationKeys.Optional, Astro.preferredLocale) + ")"
+                  }
+                  type="password"
+                  name="password"
+                  placeholder={t(
+                      TranslationKeys.PasswordPlaceholder,
+                      Astro.preferredLocale,
+                  )}
+              />
+              <button type="submit">
+                  {t(TranslationKeys.Upload, Astro.preferredLocale)}
+              </button>
+            </div>
+        </div>
+    </form>
+    <form action="./upload" method="POST" enctype="multipart/form-data">
         <h4>...{t(TranslationKeys.EnterText, Astro.preferredLocale)}:</h4>
-
         <MonoTextarea
-            label="Text"
+            label="Type some text to upload"
             name="text"
             placeholder={t(
                 TranslationKeys.EnterTextPlaceholder,
                 Astro.preferredLocale,
             )}
             rows="6"
-        /><br/>
-        <MonoInput
-            label={t(TranslationKeys.Filename, Astro.preferredLocale)}
-            type="text"
-            name="filename"
-            placeholder={t(
-            TranslationKeys.FilenamePlaceholder,
-            Astro.preferredLocale,
-            )}
-        /><br/>
-        <MonoInput
-            label={
-            t(TranslationKeys.Password, Astro.preferredLocale) + " (" +
-            t(TranslationKeys.Optional, Astro.preferredLocale) + ")"
-            }
-            type="password"
-            name="password"
-            placeholder={t(
-            TranslationKeys.PasswordPlaceholder,
-            Astro.preferredLocale,
-            )}
-        /><br/>
+        />
+        <div style="display: flex; flex-flow: row wrap; gap: 1ch; align-items: center;">
+            <MonoInput
+                label={t(TranslationKeys.Filename, Astro.preferredLocale)}
+                type="text"
+                name="filename"
+                placeholder={t(
+                TranslationKeys.FilenamePlaceholder,
+                Astro.preferredLocale,
+                )}
+            />
+            <MonoInput
+                label={
+                t(TranslationKeys.Password, Astro.preferredLocale) + " (" +
+                t(TranslationKeys.Optional, Astro.preferredLocale) + ")"
+                }
+                type="password"
+                name="password"
+                placeholder={t(
+                TranslationKeys.PasswordPlaceholder,
+                Astro.preferredLocale,
+                )}
+            />
+        </div>
 
-        <button type="submit">
+        <button type="submit" style="display: block; margin-left: auto;">
             {t(TranslationKeys.Upload, Astro.preferredLocale)}
         </button>
-    </div>
-</form>
+    </form>
+</section>
 
 <script>
   const fileInput: HTMLInputElement | null =
@@ -98,3 +101,9 @@ import MonoTextarea from "./MonoTextarea.astro";
     }
   });
 </script>
+
+<style>
+  button {
+    margin-top: 1rem;
+  }
+</style>

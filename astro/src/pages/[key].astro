@@ -55,7 +55,7 @@ if (isPasswordValid) {
     ? t(TranslationKeys.PasswordRequired, Astro.preferredLocale)
     : file.name}
 >
-    <div style="display: none;" id="file-id">{file.id}</div>
+  <div style="display: none;" id="file-id" data-expires={file.expiresAt.valueOf()}>{file.id}</div>
   {
     passwordConfirmed ? (
       <FilePage file={file} />
@@ -71,6 +71,7 @@ if (isPasswordValid) {
   const fileIdEl = document.getElementById("file-id");
   if (fileIdEl) {
     const fileId = fileIdEl.textContent;
-    addFile(fileId);
+    const expires = new Date(Number(fileIdEl.dataset.expires));
+    addFile(fileId, expires);
   }
 </script>

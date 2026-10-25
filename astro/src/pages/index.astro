@@ -12,13 +12,8 @@ import MonoHeader from "@/components/MonoHeader.astro";
         title={t(TranslationKeys.AppName, Astro.preferredLocale)}
         subtitle={t(TranslationKeys.AppDescription, Astro.preferredLocale)}
     />
-    <p style="margin-block: 2rem;">
-        {t(TranslationKeys.HomepageMessage, Astro.preferredLocale)}
-    </p>
 
-    <SearchBar />
-    <hr/>
     <UploadForm />
-    <hr/>
+    <SearchBar />
     <YourFiles />
 </Layout>

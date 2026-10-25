@@ -9,9 +9,13 @@ const error = Astro.props.error as InternalError;
 ---
 
 <Layout title={`${error.code} - ${error.message}`}>
-  <h1>{error.code} - {error.message}</h1>
-  <p>
-    {t(TranslationKeys.ReturnTo, Astro.preferredLocale)}
-    <a href="./">{t(TranslationKeys.HomePage, Astro.preferredLocale)}</a> ?
-  </p>
+  <header>
+    <h1>{error.code} - {error.message}</h1>
+  </header>
+  <section>
+    <p>
+      {t(TranslationKeys.ReturnTo, Astro.preferredLocale)}
+      <a href="./">{t(TranslationKeys.HomePage, Astro.preferredLocale)}</a> ?
+    </p>
+  </section>
 </Layout>
